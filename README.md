@@ -1,5 +1,6 @@
 # README
 =============================================================
+Dan was here.
 
 Welcome to League Spec.  
 A web app for viewing League of Legends player/champion data.
