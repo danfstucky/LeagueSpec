@@ -1,0 +1,42 @@
+// Place all the styles related to the Profiles controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+/* General */
+
+
+body {
+  background-image: url('http://s3.amazonaws.com/codecademy-content/courses/learn-rails/img/bg-static.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.profile_container {
+  margin: 0 auto;
+  width: 960px;
+}
+
+/* Main Page of Profile*/
+.main_profile {
+  color: #fff;
+  position: relative;
+  top: 100px;
+  text-align: center;
+  h1 {
+    font-size: 80px;
+    font-weight: 300;
+  }
+  p {
+  font-size: 30px;
+  }
+}
+
+
+@media screen and (max-width: 800px) {
+  body {
+        background-size: auto 100%;
+  }
+  .profile_container {
+        width: 100%;
+  }
+}
