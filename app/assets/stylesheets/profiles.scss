@@ -2,10 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 /* General */
-html, body {
-  height: 100%;
-  margin: 0;
-}
+
 
 body {
   background-image: url('http://s3.amazonaws.com/codecademy-content/courses/learn-rails/img/bg-static.jpg');
@@ -25,16 +22,15 @@ body {
   position: relative;
   top: 100px;
   text-align: center;
-}
-
-.main h1 {
-  font-size: 80px;
-  font-weight: 300;
-}
-
-.main p {
+  h1 {
+    font-size: 80px;
+    font-weight: 300;
+  }
+  p {
   font-size: 30px;
+  }
 }
+
 
 @media screen and (max-width: 800px) {
     body {
