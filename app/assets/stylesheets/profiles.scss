@@ -11,13 +11,13 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
 }
 
-.container {
+.profile_container {
   margin: 0 auto;
   width: 960px;
 }
 
-/* Main */
-.main {
+/* Main Page of Profile*/
+.main_profile {
   color: #fff;
   position: relative;
   top: 100px;
@@ -33,10 +33,10 @@ body {
 
 
 @media screen and (max-width: 800px) {
-    body {
+  body {
         background-size: auto 100%;
-    }
-    .container {
+  }
+  .profile_container {
         width: 100%;
-    }
+  }
 }
