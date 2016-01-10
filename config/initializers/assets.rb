@@ -2,7 +2,7 @@
 
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = '1.0'
-Rails.application.config.assets.precompile += %w( sessions.css )
+Rails.application.config.assets.precompile += [ 'sessions.css', 'profiles.css' ]
 # Add images here
 Rails.application.config.assets.precompile += [ 'ahri2_lol.png' ]
 # Add additional assets to the asset load path
