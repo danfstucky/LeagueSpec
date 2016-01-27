@@ -5,7 +5,7 @@
 			<%= form_for @user, url: profiles_path(@user), html: { method: :post } do |f| %>
 				<%= render 'shared/error_messages' %>
 
-				<%= f.label :name %>
+				<%= f.label :name, "Summoner Name" %>
 				<%= f.text_field :name, class: 'form-control' %>
 
 				<%= f.label :email %>

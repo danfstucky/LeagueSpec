@@ -8,4 +8,5 @@ class User < ActiveRecord::Base
 
 	has_secure_password
 	validates :password, length: { minimum: 6 }
+	# add in api cross reference later to verify summoner name exists in lol db
 end
