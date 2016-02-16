@@ -6,11 +6,11 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # Sulaimon's profile route
-  get     'user_profile'      => 'profiles#home'
-  root                  'sessions#new'
-  post    'login'   =>  'sessions#create'
-  delete  'logout'  =>  'sessions#destroy'
+  root    'sessions#new'
+  post    'login'         =>  'sessions#create'
+  delete  'logout'        =>  'sessions#destroy'
+  resources :profiles
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
