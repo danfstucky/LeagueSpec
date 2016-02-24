@@ -25,6 +25,8 @@
 }
 
 
+
+
 /* forms */
 
 input, textarea, select, .uneditable-input {
@@ -54,5 +56,30 @@ input {
 	@extend .has-error;
 	.form-control {
 		color: $state-danger-text;
+	}
+}
+
+
+.authentication_form {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-image: image-url("login_bg.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	
+	.form_container {
+		margin-top: 5%;
+		padding: 5px;
+		background-image: image-url("ahri_lol_small.png");
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
+		border: 2px solid black;
+		color: white;
+	}
+
+	img {
+		max-width: 100%;
 	}
 }
