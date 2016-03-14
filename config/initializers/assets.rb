@@ -4,7 +4,7 @@
 Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += [ 'sessions.css', 'profiles.css' ]
 # Add images here
-Rails.application.config.assets.precompile += [ 'ahri2_lol.png' ]
+Rails.application.config.assets.precompile += [ 'ahri_lol_small.png', 'login_banner.png', 'login_bg', 'signup_banner.png' ]
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path
 
