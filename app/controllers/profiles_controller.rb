@@ -15,6 +15,7 @@ class ProfilesController < ApplicationController
   	@user = User.new(user_params)
   	if @user.save
   		# Successful user signup
+      log_in @user
       flash[:success] = "Welcome to League Spec!"
       redirect_to profile_url(@user)
   	else 
