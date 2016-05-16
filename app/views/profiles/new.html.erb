@@ -1,7 +1,6 @@
-<div class="signup_page">
+<div class="signup_page authentication_form">
 	<div class="row">
-		<%= image_tag("ahri2_lol.png") %>
-		<div class="form_container col-md-6 col-md-offset-3">
+		<div class="form-bg form_container col-md-6 col-md-offset-3">
 			<%= form_for @user, url: profiles_path(@user), html: { method: :post } do |f| %>
 				<%= render 'shared/error_messages' %>
 
@@ -14,11 +13,12 @@
 				<%= f.label :password %>
 				<%= f.password_field :password, class: 'form-control' %>
 
-				<%= f.label :password_confirmation, "Confirmation" %>
+				<%= f.label :password_confirmation, "Password Confirmation" %>
 				<%= f.password_field :password_confirmation, class: 'form-control' %>
 
 				<%= f.submit "Create my account", class: "btn btn-primary" %>
 			<% end %>
 		</div>
 	</div>
+	<%= image_tag("signup_banner.png") %>
 </div>
