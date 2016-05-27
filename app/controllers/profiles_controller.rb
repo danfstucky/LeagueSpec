@@ -14,11 +14,13 @@ class ProfilesController < ApplicationController
   def create
   	@user = User.new(user_params)
   	if @user.save
-  		# Successful user signup
+      # Successful user signup
+      log_in @user
+      flash[:success] = "Welcome to League Spec!"
       redirect_to profile_url(@user)
-  	else 
-  		render 'new'
-  	end
+    else 
+      render 'new'
+    end
   end
 
   private

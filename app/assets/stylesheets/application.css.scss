@@ -25,6 +25,23 @@
 }
 
 
+/* header */
+
+#logo {
+	float: left;
+	margin-right: 10px;
+	font-size: 1.7em;
+	color: #fff;
+	text-transform: uppercase;
+	letter-spacing: -1px;
+	padding-top: 9px;
+	font-weight: bold;
+	text-decoration: none;
+	&:hover {
+		color: #fff;
+		text-decoration: none;
+	}
+}
 
 
 /* forms */
@@ -59,6 +76,11 @@ input {
 	}
 }
 
+.alert {
+	margin-top: 50px;
+	margin-bottom: 0px;
+	text-align: center;
+}
 
 .authentication_form {
 	position: fixed;
@@ -67,19 +89,34 @@ input {
 	background-image: image-url("login_bg.png");
 	background-repeat: no-repeat;
 	background-size: cover;
+	padding-top: 20px;
 	
 	.form_container {
-		margin-top: 5%;
-		padding: 5px;
+		margin-top: 6%;
+		padding: 10px;
 		background-image: image-url("ahri_lol_small.png");
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: cover;
 		border: 2px solid black;
 		color: white;
+		width: 700px;
 	}
 
 	img {
 		max-width: 100%;
+	}
+
+	.checkbox {
+		margin-top: -10px;
+		margin-bottom: 10px;
+		span {
+			margin-left: 20px;
+			font-weight: normal;
+		}
+	}
+	#session_remember_me {
+		width: auto;
+		margin-left: 0;
 	}
 }
