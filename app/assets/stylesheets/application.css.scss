@@ -95,7 +95,6 @@ input {
 
 .navbar-default {
   background-color: black;
-  border-color: #030033;
 }
 
 /* profile view */
@@ -122,15 +121,18 @@ input {
     }
     
    
-      .thumbnail {
-        height: 100%;
-        
-        
-        img {
-          max-width: 30%;
-
-        }
-    }
+       img {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    margin: auto; 
+    min-width: 100%;
+    min-height: 100%;
+    
+  
+  }
 } 
 .spec-social {
 	width:100%;
