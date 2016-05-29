@@ -95,33 +95,29 @@ input {
 
 .navbar-default {
   background-color: black;
+
+  .navbar-collapse{
+
+    .search-form{
+      margin-top:10px;
+    }
+    
+  }
 }
 
 /* profile view */
 .profile_view { 
-  padding-top: 70px; 
   width: 100%;
-  
-  .profile_info {
-  
-    }
-  
-  /*.player-bio {
-    margin-left:10px;
-    }*/
+ 
   .profile_pic {
-          /*display:block;*/
           float:left;
           margin-top:80px;
           margin-right:10px;
           margin-left:10px;
-
-          
-
-    }
+  }
     
    
-       img {
+      img {
     position: absolute; 
     top: 0; 
     left: 0; 
@@ -130,8 +126,6 @@ input {
     margin: auto; 
     min-width: 100%;
     min-height: 100%;
-    
-  
   }
 } 
 .spec-social {
