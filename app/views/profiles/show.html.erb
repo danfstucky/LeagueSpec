@@ -52,9 +52,9 @@
 				<h4>LeagueSpec Summary</h4>
 				<div class="row spec-row">
 					<div class="col-md-6 game-stat-1">
-						<span class="text-muted">Last Game: </span> SalmonKing<br>
-						<span class="text-muted">Last Game Won:</span> We Be Ballin'<br>
-						<span class="text-muted">Last Game Lost:</span> Nuevo Game<br>
+						<span class="text-muted">Summoner Name: </span> <%= "#{@sampleSummoner.summoner_name.capitalize}" %><br>
+						<span class="text-muted">Summoner ID:</span> <%= "#{@sampleSummoner.getSummonerId}" %><br>
+						<span class="text-muted">Summoner Level:</span> <%= "#{@sampleSummoner.getSummonerLevel}" %><br>
 					</div>
 					<div class="col-md-6 game-stat-2 pull-right">
 						<span class="text-muted">Current Winning Streak: </span> 15 wins<br>

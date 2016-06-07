@@ -5,6 +5,7 @@ class ProfilesController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @sampleSummoner = Summoner.new('ahri')
   end
 
   def new
