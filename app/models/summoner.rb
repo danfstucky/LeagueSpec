@@ -3,7 +3,7 @@
             
             
             
-            attr_accessor :summoner_name, :summoner
+            attr_accessor :summoner_name
            
             def initialize(name)
                 @summonerReq = Lol::SummonerRequest.new Rails.application.secrets.sulai_api_key, "na"
