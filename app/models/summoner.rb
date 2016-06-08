@@ -6,8 +6,8 @@
             attr_accessor :summoner_name, :summoner
            
             def initialize(name)
-                @summonerReq = Lol::SummonerRequest.new "833becde-d428-4d74-bd27-8418e1c0a33d", "na"
-                @summoner_name=name ||= 'ahri'
+                @summonerReq = Lol::SummonerRequest.new Rails.application.secrets.sulai_api_key, "na"
+                @summoner_name=name ||= 'nautilus'
                 @summonerObj = getSummonerObject
             end
             
