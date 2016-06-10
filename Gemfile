@@ -28,6 +28,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.10'
 
+
+#Include Lol-Api
+gem 'ruby-lol'
+
+gem 'certified'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
