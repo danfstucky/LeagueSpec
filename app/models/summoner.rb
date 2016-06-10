@@ -1,4 +1,7 @@
-        require 'lol'
+
+require 'lol'
+require 'certified'
+
         class Summoner < ActiveRecord::Base
             
             
