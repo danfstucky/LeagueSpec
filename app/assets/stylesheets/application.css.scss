@@ -16,6 +16,11 @@
 
 /* Universal Styles */
 
+body {
+  padding-top: 40px;
+}
+
+
 /* mixins, variables, etc. */
 
 @mixin box_sizing {
@@ -77,7 +82,7 @@ input {
 }
 
 .alert {
-	margin-top: 50px;
+	margin-top: 10px;
 	margin-bottom: 0px;
 	text-align: center;
 }

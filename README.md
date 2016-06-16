@@ -12,6 +12,7 @@ A web app for viewing League of Legends player/champion data.
 
 * Ruby: 2.2.3
 * Rails: 4.2.4
+
 -------------------------------------------------------------
 #### Test Users
 * **Username:** Kaitrono  **Password:** password  **Email:** test@test.com
