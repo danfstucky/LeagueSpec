@@ -33,6 +33,8 @@ gem 'ruby-lol'
 
 gem 'certified'
 
+gem 'will_paginate'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

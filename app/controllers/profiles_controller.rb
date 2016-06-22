@@ -3,6 +3,7 @@ require 'certified'
 require 'ostruct'
 class ProfilesController < ApplicationController
   attr_accessor :summonerObj, :summonerReq, :statsObj, :statsReq, :champsReq, :champsObj
+  before_action :verify_summoner_name, only: [:create]
   before_action :get_summoner, only: [:show]
   before_action :get_summoner_ranked_stats, only: [:show]
   before_action :get_champion_request, only: [:show]
@@ -71,12 +72,8 @@ class ProfilesController < ApplicationController
   def get_summoner_ranked_stats
     @statsReq = Lol::StatsRequest.new Rails.application.secrets.sulai_api_key, "na"
     @statsObj = @statsReq.ranked(@summonerObj.id, extra = {})
-    #@statsVal = @statsObj.champions.sort_by{|x, y| x.stats[:total_sessions_played]}.reverse[1].id #.stats[:total_sessions_played]
-    #@statsVal = @statsObj.champions.sort_by{|x, y| x.stats[:total_sessions_played]}.last.id
-    
-    
-    #@champsReq = Lol::ChampionRequest.new Rails.application.secrets.sulai_api_key, "na"
-    #@champsVal = @champsReq.get(:id => @statsVal).active
+    #Since the champion with id = 0 always returns 404 error and is used for error checking, I am deleting it from the array.
+    @statsObj.champions.delete_if{ |h| h.id == 0 }
   end
 
   def get_most_played_champ
@@ -85,10 +82,8 @@ class ProfilesController < ApplicationController
     #Most summoners I have tried have ID = 0 for champions with the highest total session played.
     #However, I had trouble retrieving this champion and after researching for a while, I found that champion with ID = 0 does not exist and
     #is only used to deal with exceptions. Linked here - https://market.mashape.com/community/elophant-league-of-legends
-    @mostPlayedChamp = @statsObj.champions.sort_by{|x| -x.stats.total_sessions_played}[1]
-    @mostPlayedChampion = @champsReq.get('champion', @mostPlayedChamp.id)
-    @testInfo = @mostPlayedChamp.id
-    @testStats =  @mostPlayedChampion
+    @mostPlayedChampObj = @statsObj.champions.sort_by{|x| -x.stats.total_sessions_played}
+    @mostPlayedChampObj = @mostPlayedChampObj.paginate(:page => params[:page], :per_page => 5)
   end
 
   def get_overall_WLR
@@ -129,21 +124,26 @@ class ProfilesController < ApplicationController
     #. This is tricky, as some Champs might have zero deaths. In the case of zero death, division is
     #made by zero to avoid divide by zero error. Return first element of descending array.
     #KDR for a champion is calculated per session instead of using kill values that might not be reflective of per session values.
-    @highestKillDeathRatioChamp = @statsObj.champions.sort_by{|x| if x.stats.total_deaths_per_session >  0 then 
-                                                                    -(x.stats.most_champion_kills_per_session.to_f)/(x.stats.total_deaths_per_session)
+    @highestKillDeathRatioChampObj = @statsObj.champions.sort_by{|x| if x.stats.total_deaths_per_session >  0 then 
+                                                                    -((x.stats.most_champion_kills_per_session.to_f)/(x.stats.total_deaths_per_session))
                                                                   else 
                                                                     -(x.stats.most_champion_kills_per_session.to_f) 
                                                                   end
-                                                  }[0]
+                                                  }#[0]
+    @highestKillDeathRatioChampObj = @highestKillDeathRatioChampObj.paginate(:page => params[:page], :per_page => 5)                                      
   end
 
   def get_highest_WLR_champ
     #Same logic as above
-    @highestWinLossRatioChamp = @statsObj.champions.sort_by{|x| if x.stats.total_sessions_lost >  0 then 
-                                                                    -(x.stats.total_sessions_won.to_f)/(x.stats.total_sessions_lost)
+
+    @highestWinLossRatioChampObj = @statsObj.champions.sort_by{|x| if x.stats.total_sessions_lost >  0 then 
+                                                                    -((x.stats.total_sessions_won.to_f)/(x.stats.total_sessions_lost))
                                                                   else 
                                                                     -(x.stats.total_sessions_won.to_f) 
                                                                   end
-                                                  }[0]
+                                                  }#[0]
+    
+    @highestWinLossRatioChampObj = @highestWinLossRatioChampObj.paginate(:page => params[:page], :per_page => 5)
   end
+
 end
