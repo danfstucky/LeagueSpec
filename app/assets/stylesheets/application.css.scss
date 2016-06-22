@@ -151,6 +151,20 @@ input {
           margin-top:80px;
           margin-right:10px;
           margin-left:10px;
+
+  }
+  .profile_info {
+    background-color: black;
+    padding: 20px;
+  }
+
+  .summoner-id{
+    color: white;
+  }
+
+  .bio-text{
+    color: white;
+    font-size: 1.3em;
   }
 
   img {
@@ -172,4 +186,15 @@ input {
 	margin-right:10px;
 	margin-top:10px;
 	margin-bottom:10px;
+
+	.header{
+	  background-color: black;
+	  color: white;
+	  padding: 10px;
+	  margin-left:10px;
+	}
+
+	.stat{
+	  font-size: 1.25 em;
+	}
 }
