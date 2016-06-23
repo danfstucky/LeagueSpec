@@ -47,7 +47,7 @@
   <div class="col-md-12">
   	<div class="row">
 	  	<div class="well well-sm header">
-	  		<div class="champions-header header">
+	  		<div class="champions-header">
 	       <h3>Featured Champions</h3>
 	      </div>
 	  	</div>
@@ -63,12 +63,12 @@
 					<div class="panel-body champ-panel">
 						<div class="row champ-row">
 						  <div class="col-md-2 champ-img">
-               <%= image_tag("ahri_lol_small.png") %>
+								<%= link_to image_tag("ahri_lol_small.png"), champion_path(champion.id)  %>
 							</div>
 							<div class="col-md-5 stat">
-								<small class="text">ID: <%= "#{thisChampObj[:id]}" %></small><br>
-								<small class="text">Name:  <%= "#{thisChampObj[:name]}" %></small><br>
-								<small class="text">Title: <%= "#{thisChampObj[:title]}" %></small><br>
+								<small class="text">&nbsp;ID: <%= "#{thisChampObj[:id]}" %></small><br>
+								<small class="text">&nbsp;Name:  <%= "#{thisChampObj[:name]}" %></small><br>
+								<small class="text">&nbsp;Title: <%= "#{thisChampObj[:title].titleize}" %></small><br>
 							</div>
 							<div class="col-md-5 stat pull-right">
 								<small class="text">Champ Kills: <%= "#{champion.stats.most_champion_kills_per_session}" %></small><br>
@@ -95,12 +95,12 @@
 					<div class="panel-body champ-panel">
 						<div class="row champ-row">
 							<div class="col-md-2 champ-img">
-								<%= image_tag("ahri_lol_small.png") %>
+								<%= link_to image_tag("ahri_lol_small.png"), champion_path(champion.id)  %>
 							</div>
 							<div class="col-md-5 stat">
-								<small class="text">ID: <%= "#{thisChampObj[:id]}" %></small><br>
-								<small class="text">Name:  <%= "#{thisChampObj[:name]}" %></small><br>
-								<small class="text">Title: <%= "#{thisChampObj[:title]}" %></small><br>
+								<small class="text">&nbsp;ID: <%= "#{thisChampObj[:id]}" %></small><br>
+								<small class="text">&nbsp;Name:  <%= "#{thisChampObj[:name]}" %></small><br>
+								<small class="text">&nbsp;Title: <%= "#{thisChampObj[:title].titleize}" %></small><br>
 
 							</div>
 							<div class="col-md-5 stat pull-right">
@@ -120,6 +120,7 @@
 	</div>
 
 	<div class = "col-md-4 most-played-champs">
+
 		<div class="row feature-header header">
 			<h4>Most Played</h4>
 		</div>
@@ -129,12 +130,12 @@
 					<div class="panel-body champ-panel">
 						<div class="row champ-row">
 							<div class="col-md-2 champ-img">
-								<%= image_tag("ahri_lol_small.png") %>
+								<%= link_to image_tag("ahri_lol_small.png"), champion_path(champion.id)  %>
 							</div>
 							<div class="col-md-5 stat">
-								<small class="text">ID: <%= "#{thisChampObj[:id]}" %></small><br>
-								<small class="text">Name:  <%= "#{thisChampObj[:name]}" %></small><br>
-								<small class="text">Title: <%= "#{thisChampObj[:title]}" %></small><br>
+								<small class="text">&nbsp;ID: <%= "#{thisChampObj[:id]}" %></small><br>
+								<small class="text">&nbsp;Name:  <%= "#{thisChampObj[:name]}" %></small><br>
+								<small class="text">&nbsp;Title: <%= "#{thisChampObj[:title].titleize}" %></small><br>
 
 							</div>
 							<div class="col-md-5 stat pull-right">
