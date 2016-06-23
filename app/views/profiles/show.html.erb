@@ -62,15 +62,15 @@
 		    <div class="panel champ-stats">
 					<div class="panel-body champ-panel">
 						<div class="row champ-row">
-						  <div class="col-md-2 champ-img">
+						  <div class="col-md-1 champ-img">
 								<%= link_to image_tag("ahri_lol_small.png"), champion_path(champion.id)  %>
 							</div>
-							<div class="col-md-5 stat">
+							<div class="col-md-7 stat">
 								<small class="text">&nbsp;ID: <%= "#{thisChampObj[:id]}" %></small><br>
 								<small class="text">&nbsp;Name:  <%= "#{thisChampObj[:name]}" %></small><br>
 								<small class="text">&nbsp;Title: <%= "#{thisChampObj[:title].titleize}" %></small><br>
 							</div>
-							<div class="col-md-5 stat pull-right">
+							<div class="col-md-4 stat pull-right">
 								<small class="text">Champ Kills: <%= "#{champion.stats.most_champion_kills_per_session}" %></small><br>
 								<small class="text">Champ Deaths:  <%= "#{champion.stats.total_deaths_per_session}" %></small><br>
 								<small class="text">K-D Ratio: <% if champion.stats.total_deaths_per_session >  0 %>
@@ -94,16 +94,16 @@
 		    <div class="panel champ-stats">
 					<div class="panel-body champ-panel">
 						<div class="row champ-row">
-							<div class="col-md-2 champ-img">
+							<div class="col-md-1 champ-img">
 								<%= link_to image_tag("ahri_lol_small.png"), champion_path(champion.id)  %>
 							</div>
-							<div class="col-md-5 stat">
+							<div class="col-md-7 stat">
 								<small class="text">&nbsp;ID: <%= "#{thisChampObj[:id]}" %></small><br>
 								<small class="text">&nbsp;Name:  <%= "#{thisChampObj[:name]}" %></small><br>
 								<small class="text">&nbsp;Title: <%= "#{thisChampObj[:title].titleize}" %></small><br>
 
 							</div>
-							<div class="col-md-5 stat pull-right">
+							<div class="col-md-4 stat pull-right">
 								<small class="text">Wins: <%= "#{champion.stats.total_sessions_won}" %></small><br>
 								<small class="text">Losses:  <%= "#{champion.stats.total_sessions_lost}" %></small><br>
 								<small class="text">W-L Ratio: <% if champion.stats.total_sessions_lost >  0 %>
@@ -129,16 +129,16 @@
 		    <div class="panel champ-stats">
 					<div class="panel-body champ-panel">
 						<div class="row champ-row">
-							<div class="col-md-2 champ-img">
+							<div class="col-md-1 champ-img">
 								<%= link_to image_tag("ahri_lol_small.png"), champion_path(champion.id)  %>
 							</div>
-							<div class="col-md-5 stat">
+							<div class="col-md-7 stat">
 								<small class="text">&nbsp;ID: <%= "#{thisChampObj[:id]}" %></small><br>
 								<small class="text">&nbsp;Name:  <%= "#{thisChampObj[:name]}" %></small><br>
 								<small class="text">&nbsp;Title: <%= "#{thisChampObj[:title].titleize}" %></small><br>
 
 							</div>
-							<div class="col-md-5 stat pull-right">
+							<div class="col-md-4 stat pull-right">
 								<small class="text">Played: <%= "#{champion.stats.total_sessions_played}" %></small><br>
 								<small class="text">Wins:  <%= "#{champion.stats.total_sessions_won}" %></small><br>
 								<small class="text">Losses: <%= "#{champion.stats.total_sessions_lost}" %>
