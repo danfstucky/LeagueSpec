@@ -3,3 +3,5 @@ Hi <%= @user.name %>,
 Welcome to League Spec! Click on the link below to activate your account:
 
 <%= edit_account_activation_url(@user.activation_token, email: @user.email) %>
+
+This is an unattended email address. Do not reply
