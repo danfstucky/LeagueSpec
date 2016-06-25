@@ -2,17 +2,18 @@ require 'lol'
 require 'certified'
 require 'ostruct'
 class ProfilesController < ApplicationController
-  attr_accessor :summonerObj, :summonerReq, :statsObj, :statsReq, :champsReq, :champsObj
+  attr_accessor :summonerObj, :statsObj, :champsReq, :champsObj
   before_action :verify_summoner_name, only: [:create]
   before_action :get_summoner, only: [:show]
-  before_action :get_summoner_ranked_stats, only: [:show]
+=begin
+before_action :get_summoner_ranked_stats, only: [:show]
   before_action :get_champion_request, only: [:show]
   before_action :get_overall_WLR, only: [:show]
   before_action :get_overall_KDR, only: [:show]
   before_action :get_highest_WLR_champ, only: [:show]
   before_action :get_highest_KDR_champ, only: [:show]
   before_action :get_most_played_champ, only: [:show]
-
+=end
 	def index
 
   end
@@ -49,8 +50,8 @@ class ProfilesController < ApplicationController
 
   def verify_summoner_name
     begin
-      @summonerReq = Lol::SummonerRequest.new Rails.application.secrets.sulai_api_key, "na"
-      @summonerObj = @summonerReq.by_name(user_params[:name]).first
+      summonerReq = Lol::SummonerRequest.new Rails.application.secrets.sulai_api_key, "na"
+      @summonerObj = summonerReq.by_name(user_params[:name]).first
     rescue Lol::NotFound => e
       if e.message == '404 Not Found'
         flash[:danger] = "Summoner name has to be registered. Register on the LoL website and return here to sign up"
@@ -60,8 +61,15 @@ class ProfilesController < ApplicationController
   end
 
   def get_summoner
-    @summonerReq = Lol::SummonerRequest.new Rails.application.secrets.sulai_api_key, "na"
-    @summonerObj = @summonerReq.by_name(User.find(params[:id]).name).first
+    summonerReq = Lol::SummonerRequest.new Rails.application.secrets.sulai_api_key, "na"
+    @summonerObj = summonerReq.by_name(User.find(params[:id]).name).first
+    get_summoner_ranked_stats
+    get_champion_request
+    get_most_played_champ
+    get_overall_WLR
+    get_overall_KDR
+    get_highest_KDR_champ
+    get_highest_WLR_champ
   end
   
   #Static Request is used to retrieve info on any of champion, item, mastery, rune summoner_spell
@@ -70,8 +78,8 @@ class ProfilesController < ApplicationController
   end
 
   def get_summoner_ranked_stats
-    @statsReq = Lol::StatsRequest.new Rails.application.secrets.sulai_api_key, "na"
-    @statsObj = @statsReq.ranked(@summonerObj.id, extra = {})
+    statsReq = Lol::StatsRequest.new Rails.application.secrets.sulai_api_key, "na"
+    @statsObj = statsReq.ranked(@summonerObj.id, extra = {})
     #Since the champion with id = 0 always returns 404 error and is used for error checking, I am deleting it from the array.
     @statsObj.champions.delete_if{ |h| h.id == 0 }
   end
@@ -88,31 +96,31 @@ class ProfilesController < ApplicationController
 
   def get_overall_WLR
     #OverallWLR
-    @overallLosses = 0
-    @overallWins = 0                                              
+    overallLosses = 0
+    overallWins = 0                                              
     @statsObj.champions.each do |x|
-                                @overallLosses += x.stats.total_sessions_lost
-                                @overallWins += x.stats.total_sessions_won 
-                            end
-    if @overallLosses > 0 then                       
-      @overallWinLossRatio = (@overallWins.to_f/@overallLosses).round(2)
+      overallLosses += x.stats.total_sessions_lost
+      overallWins += x.stats.total_sessions_won 
+    end
+    if overallLosses > 0 then                       
+      @overallWinLossRatio = (overallWins.to_f/overallLosses).round(2)
     else
-      @overallWinLossRatio = @overallWins.to_f
+      @overallWinLossRatio = overallWins.to_f
     end
   end
 
   def get_overall_KDR
     #OverallKDR
-    @overallKills = 0
-    @overallDeaths = 0                                              
+    overallKills = 0
+    overallDeaths = 0                                              
     @statsObj.champions.each do |x|
-                                @overallKills+= x.stats.most_champion_kills_per_session
-                                @overallDeaths+= x.stats.total_deaths_per_session 
-                            end
-    if @overallDeaths > 0 then                       
-      @overallKillDeathRatio = (@overallKills.to_f/@overallDeaths).round(2)
+      overallKills+= x.stats.most_champion_kills_per_session
+      overallDeaths+= x.stats.total_deaths_per_session 
+    end
+    if overallDeaths > 0 then                       
+      @overallKillDeathRatio = (overallKills.to_f/overallDeaths).round(2)
     else
-      @overallKillDeathRatio = @overallKills.to_f
+      @overallKillDeathRatio = overallKills.to_f
     end
     
   end
@@ -124,25 +132,24 @@ class ProfilesController < ApplicationController
     #. This is tricky, as some Champs might have zero deaths. In the case of zero death, division is
     #made by zero to avoid divide by zero error. Return first element of descending array.
     #KDR for a champion is calculated per session instead of using kill values that might not be reflective of per session values.
-    @highestKillDeathRatioChampObj = @statsObj.champions.sort_by{|x| if x.stats.total_deaths_per_session >  0 then 
-                                                                    -((x.stats.most_champion_kills_per_session.to_f)/(x.stats.total_deaths_per_session))
-                                                                  else 
-                                                                    -(x.stats.most_champion_kills_per_session.to_f) 
-                                                                  end
-                                                  }#[0]
+    @highestKillDeathRatioChampObj = @statsObj.champions.sort_by{|x|  if x.stats.total_deaths_per_session >  0 then 
+                                                                        -((x.stats.most_champion_kills_per_session.to_f)/(x.stats.total_deaths_per_session))
+                                                                      else 
+                                                                        -(x.stats.most_champion_kills_per_session.to_f) 
+                                                                      end
+    }
     @highestKillDeathRatioChampObj = @highestKillDeathRatioChampObj.paginate(:page => params[:page], :per_page => 5)                                      
   end
 
   def get_highest_WLR_champ
     #Same logic as above
 
-    @highestWinLossRatioChampObj = @statsObj.champions.sort_by{|x| if x.stats.total_sessions_lost >  0 then 
-                                                                    -((x.stats.total_sessions_won.to_f)/(x.stats.total_sessions_lost))
-                                                                  else 
-                                                                    -(x.stats.total_sessions_won.to_f) 
-                                                                  end
-                                                  }#[0]
-    
+    @highestWinLossRatioChampObj = @statsObj.champions.sort_by{|x|  if x.stats.total_sessions_lost >  0 then 
+                                                                      -((x.stats.total_sessions_won.to_f)/(x.stats.total_sessions_lost))
+                                                                    else 
+                                                                      -(x.stats.total_sessions_won.to_f) 
+                                                                    end
+    }
     @highestWinLossRatioChampObj = @highestWinLossRatioChampObj.paginate(:page => params[:page], :per_page => 5)
   end
 
