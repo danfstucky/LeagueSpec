@@ -2,7 +2,7 @@ require 'lol'
 require 'certified'
 require 'ostruct'
 class ProfilesController < ApplicationController
-  attr_accessor :summonerObj, :statsObj, :champsReq, :champsObj
+  attr_accessor :summonerObj, :statsObj, :champsReq
   before_action :verify_summoner_name_and_stats, only: [:create]
   before_action :get_summoner, only: [:show]
 
@@ -53,6 +53,7 @@ class ProfilesController < ApplicationController
       if e.message == '404 Not Found'
         flash[:danger] = "Summoner name has to be registered. Register on the LoL website and return here to sign up"
         redirect_to new_profile_path
+        return
       end
     end
     begin
