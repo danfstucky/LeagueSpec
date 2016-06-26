@@ -3,7 +3,7 @@ require 'certified'
 require 'ostruct'
 class ProfilesController < ApplicationController
   attr_accessor :summonerObj, :statsObj, :champsReq, :champsObj
-  before_action :verify_summoner_name, only: [:create]
+  before_action :verify_summoner_name_and_stats, only: [:create]
   before_action :get_summoner, only: [:show]
 
 	def index
@@ -40,13 +40,27 @@ class ProfilesController < ApplicationController
   end
 
 
-  def verify_summoner_name
+  def verify_summoner_name_and_stats
+#So far, only three requests are being used. Stats Request, Static Request and Summoner Request.
+#Static request doesn't blow up because it is static data that does not change .
+#Stats request and summoner request have blown up so far, so this verification prevents us from creating an account for someone
+#whose stats or summoner request will blow up.
+
     begin
       summonerReq = Lol::SummonerRequest.new Rails.application.secrets.sulai_api_key, "na"
       @summonerObj = summonerReq.by_name(user_params[:name]).first
     rescue Lol::NotFound => e
       if e.message == '404 Not Found'
         flash[:danger] = "Summoner name has to be registered. Register on the LoL website and return here to sign up"
+        redirect_to new_profile_path
+      end
+    end
+    begin
+      statsReq = Lol::StatsRequest.new Rails.application.secrets.sulai_api_key, "na"
+      @statsObj = statsReq.ranked(@summonerObj.id, extra = {})
+    rescue Lol::NotFound => e
+      if e.message == '404 Not Found'
+        flash[:danger] = "Summoner stats were not found. Verify that summoner has been active in the last calendar year and try signing up again."
         redirect_to new_profile_path
       end
     end
@@ -70,8 +84,10 @@ class ProfilesController < ApplicationController
   end
 
   def get_summoner_ranked_stats
+    
     statsReq = Lol::StatsRequest.new Rails.application.secrets.sulai_api_key, "na"
     @statsObj = statsReq.ranked(@summonerObj.id, extra = {})
+    
     #Since the champion with id = 0 always returns 404 error and is used for error checking, I am deleting it from the array.
     @statsObj.champions.delete_if{ |h| h.id == 0 }
   end
