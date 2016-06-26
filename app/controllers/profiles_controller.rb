@@ -5,15 +5,7 @@ class ProfilesController < ApplicationController
   attr_accessor :summonerObj, :statsObj, :champsReq, :champsObj
   before_action :verify_summoner_name, only: [:create]
   before_action :get_summoner, only: [:show]
-=begin
-before_action :get_summoner_ranked_stats, only: [:show]
-  before_action :get_champion_request, only: [:show]
-  before_action :get_overall_WLR, only: [:show]
-  before_action :get_overall_KDR, only: [:show]
-  before_action :get_highest_WLR_champ, only: [:show]
-  before_action :get_highest_KDR_champ, only: [:show]
-  before_action :get_most_played_champ, only: [:show]
-=end
+
 	def index
 
   end
