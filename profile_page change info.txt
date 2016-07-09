@@ -1,2 +1,0 @@
-Add thead and tbody to table in profile/show
-Stopped in search function of profiles controller..need to display error and message. Line 49
