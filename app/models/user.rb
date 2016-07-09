@@ -71,6 +71,10 @@ class User < ActiveRecord::Base
 		reset_sent_at < 2.hours.ago
 	end
 	
+  def self.find_summoner_by_name(summoner_name)
+		where(name: summoner_name).first
+	end
+
 	private
 
 	#Converts email to all lower-case
@@ -84,4 +88,5 @@ class User < ActiveRecord::Base
 		self.activation_digest = User.digest(activation_token)
 	end
 
+  
 end

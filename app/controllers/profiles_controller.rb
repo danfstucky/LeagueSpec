@@ -2,7 +2,7 @@ require 'lol'
 require 'certified'
 require 'ostruct'
 class ProfilesController < ApplicationController
-  attr_accessor :summonerObj, :statsObj, :champsReq
+  attr_accessor :summonerObj, :statsObj, :champsReq, :summonerReq, :statsReq
   before_action :verify_summoner_name_and_stats, only: [:create]
   before_action :get_summoner, only: [:show]
 
@@ -31,12 +31,21 @@ class ProfilesController < ApplicationController
     end
   end
 
-  
-
   private
 
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  end
+
+  def create_summoner_connection
+    @summonerReq = Lol::SummonerRequest.new Rails.application.secrets.sulai_api_key, "na"
+  end
+  def create_stats_connection
+    @statsReq = Lol::StatsRequest.new Rails.application.secrets.sulai_api_key, "na"
+    
+  end
+  def create_champ_connection
+    @champsReq = Lol::StaticRequest.new Rails.application.secrets.sulai_api_key, "na"
   end
 
 
@@ -47,8 +56,8 @@ class ProfilesController < ApplicationController
 #whose stats or summoner request will blow up.
 
     begin
-      summonerReq = Lol::SummonerRequest.new Rails.application.secrets.sulai_api_key, "na"
-      @summonerObj = summonerReq.by_name(user_params[:name]).first
+      create_summoner_connection
+      @summonerObj = @summonerReq.by_name(user_params[:name]).first
     rescue Lol::NotFound => e
       if e.message == '404 Not Found'
         flash[:danger] = "Summoner name has to be registered. Register on the LoL website and return here to sign up"
@@ -57,7 +66,7 @@ class ProfilesController < ApplicationController
       end
     end
     begin
-      statsReq = Lol::StatsRequest.new Rails.application.secrets.sulai_api_key, "na"
+      create_stats_connection
       @statsObj = statsReq.ranked(@summonerObj.id, extra = {})
     rescue Lol::NotFound => e
       if e.message == '404 Not Found'
@@ -68,10 +77,10 @@ class ProfilesController < ApplicationController
   end
 
   def get_summoner
-    summonerReq = Lol::SummonerRequest.new Rails.application.secrets.sulai_api_key, "na"
-    @summonerObj = summonerReq.by_name(User.find(params[:id]).name).first
+    create_summoner_connection
+    @summonerObj = @summonerReq.by_name(User.find(params[:id]).name).first
     get_summoner_ranked_stats
-    get_champion_request
+    create_champ_connection
     get_most_played_champ
     get_overall_WLR
     get_overall_KDR
@@ -80,15 +89,11 @@ class ProfilesController < ApplicationController
   end
   
   #Static Request is used to retrieve info on any of champion, item, mastery, rune summoner_spell
-  def get_champion_request
-    @champsReq = Lol::StaticRequest.new Rails.application.secrets.sulai_api_key, "na"
-  end
+  
 
   def get_summoner_ranked_stats
-    
-    statsReq = Lol::StatsRequest.new Rails.application.secrets.sulai_api_key, "na"
+    create_stats_connection
     @statsObj = statsReq.ranked(@summonerObj.id, extra = {})
-    
     #Since the champion with id = 0 always returns 404 error and is used for error checking, I am deleting it from the array.
     @statsObj.champions.delete_if{ |h| h.id == 0 }
   end

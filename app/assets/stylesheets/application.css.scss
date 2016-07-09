@@ -137,6 +137,7 @@ input {
   .navbar-collapse{
     .search-form{
       margin-top:10px;
+      display: inline;
     }   
   }
 }
@@ -188,18 +189,57 @@ td {
 	vertical-align: top;
 }
 
+
+.header {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  margin-left:10px;
+  margin-top:20px;
+  margin-bottom:20px;
+  border: 1px solid black;
+}
+.search-page {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-image: image-url("login_bg.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	padding-top: 20px;
+	.search-table{
+	  margin-top:60px;
+	  border: 1px solid black;
+	  border-radius: 1px;
+	  .search-header{
+	    text-align: center;
+	    font-size: 1.7em;
+	  }
+	  .results-block {
+		  margin: 10px;
+		}
+    #friend-lookup-errors {
+      text-align: center;
+    }
+
+  }
+	.search-table td, .search-table th{
+		border: none;
+		.btn-default{
+	    color: white;
+	    background: black;
+	  }
+
+	}
+}
+
+
+
+
 .spec-social {
 	width:100%;
 	height:100%;
-	.header {
-	  background-color: black;
-	  color: white;
-	  padding: 10px;
-	  margin-left:10px;
-	  margin-top:20px;
-	  margin-bottom:20px;
-	  border: 1px solid black;
-  }
+	
 
   .champions-header{
     margin-right: 20px;
@@ -238,3 +278,4 @@ td {
 	  }
   }
 }
+
