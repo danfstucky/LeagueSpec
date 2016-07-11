@@ -48,10 +48,12 @@
 			    		      <% end %>
 			    		    </div>
 			    		  <% else %>
-			    		    <div id="friend-lookup-errors" class="well results-block">
-			    		      <strong><%= @name.capitalize %> is not a recognized League of Legends player.</strong><br>
-			    		      <strong> Verify that <%= @name.capitalize %> is a valid summoner name and try again.</strong><br>
-			    		    </div>
+			    		    
+				    		    <div id="friend-lookup-errors" class="well results-block">
+				    		      <strong><%= @name.capitalize %> is not a recognized League of Legends player.</strong><br>
+				    		      <strong> Verify that <%= @name.capitalize %> is a valid summoner name and try again.</strong><br>
+				    		    </div>
+			    		   
 			    		  <% end %>
 		    		  </td>
 		      </tr>
