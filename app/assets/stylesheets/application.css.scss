@@ -194,9 +194,7 @@ td {
   background-color: black;
   color: white;
   padding: 10px;
-  margin-left:10px;
-  margin-top:20px;
-  margin-bottom:20px;
+  margin: 20px 0px 20px 10px;
   border: 1px solid black;
 }
 .search-page {
@@ -208,27 +206,30 @@ td {
 	background-size: cover;
 	padding-top: 20px;
 	.search-table{
-	  margin-top:60px;
+    border-collapse: collapse;
+    margin-top:60px;
 	  border: 1px solid black;
-	  border-radius: 1px;
+	  cellpadding: 0;
 	  .search-header{
 	    text-align: center;
 	    font-size: 1.7em;
 	  }
-	  .results-block {
-		  margin: 10px;
-		}
-    #friend-lookup-errors {
-      text-align: center;
-    }
-
-  }
+	}
 	.search-table td, .search-table th{
-		border: none;
-		.btn-default{
+	  width: auto;
+	  padding: 5px;
+		border: 0px;
+		.btn{
+      width: 100%;
+    }
+    .btn-default{
 	    color: white;
 	    background: black;
 	  }
+	  .champ-img{
+      width: 10%;
+      vertical-align: middle;
+    }
 	  .no-stats{
 	    background: black;
 	    color: white;

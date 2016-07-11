@@ -132,8 +132,8 @@ module LolConnections
   def search_summoner
     create_search_connection
     begin
-      @friend = @summonerReq.by_name(params[:friend].downcase).first
-      get_summoner_ranked_stats(@friend.id)
+        @summoner = @summonerReq.by_name(params[:summoner].downcase).first
+        get_summoner_ranked_stats(@summoner.id)
     rescue Lol::NotFound => e
       if e.message == '404 Not Found'
         return

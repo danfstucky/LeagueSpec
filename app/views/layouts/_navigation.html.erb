@@ -34,9 +34,9 @@
         </li>
       </ul>
     <div class="col-md-3 search-form pull-right">  
-      <%= form_tag search_friends_path, class: "navbar-form", method: :get, id: 'friend-lookup-form' do %>
+      <%= form_tag search_summoner_path, class: "navbar-form", method: :get, id: 'summoner-lookup-form' do %>
         <div class="input-group">
-          <%= text_field_tag :friend, params[:friend], class: "form-control search-box", placeholder: "Search Summoner ", autofocus: true %>
+          <%= text_field_tag :summoner, params[:summoner], class: "form-control search-box", placeholder: "Search Summoner ", autofocus: true %>
           <span class="input-group-btn">
             <%= button_tag(type: :submit, class: "btn btn-default") do %>Search
             <% end %>
