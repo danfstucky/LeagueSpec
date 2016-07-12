@@ -1,8 +1,0 @@
-Created a validation method to verify that Summoner Names already exist in the database before allowing them to sign up:
-Found sample summoner names at: http://www.mobafire.com/league-of-legends/players?sort_type=seen_ts&sort_order=&name=&server=NA&elo_min=&elo_max=
-Verified that summoner names exist and are still valid at: http://lolnamecheck.jj.ai/
-Invalid summoner names don't save to DB and are redirected to signup page with appropriate message
-
-Profile display
-- Accessed Champions/Summoner info and can display
-- Need to figure out how to get pictures or do something else.
