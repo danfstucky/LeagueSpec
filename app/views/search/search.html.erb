@@ -60,10 +60,9 @@
 		      <tr>
             <%if logged_in? %>		      
 			      	<% if @statsObj %>
-                <% @user = User.find_summoner_by_name(@name) %>
-                <% if @user %><!--more logic needed here to confirm that user is not already a friend-->
-                  <td><%= link_to "Add Summoner".html_safe, profile_path(@current_user.id), :class =>"btn btn-success" %></td>
-                  <td ><%= link_to "View Profile".html_safe, profile_path(@user.id), :class =>"btn btn-primary" %></td>
+                <% if @registeredUser %><!--more logic needed here to confirm that user is not already a friend-->
+                  <td><%= link_to "Add Summoner".html_safe, friendship_new_path, :name =>"summoner_to_add_id", :value=> :summoner, :class =>"btn btn-success" %></td>
+                  <td ><%= link_to "View Profile".html_safe, profile_path(@registeredUser.id), :class =>"btn btn-primary" %></td>
                   <td ><%= link_to "Dismiss Search".html_safe, profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
                 <% else %>
                   <td ><%= link_to "Invite Friend".html_safe, root_path, :class =>"btn btn-primary" %></td>
@@ -74,14 +73,13 @@
 			      	<% end %>
 			      <% else %>
 			        <% if @statsObj %>
-                <% @user = User.find_summoner_by_name(@name) %>
-                 <% if @user %>
+                <% if @registeredUser %>
                   <td  ><%= link_to "Login to Add Summoner".html_safe, login_path, :class =>"btn btn-success" %></td>
                   <td ><%= link_to "Sign Up to Add Summoner".html_safe, new_profile_path, :class =>"btn btn-primary" %></td>
-                 <% else %>
+                <% else %>
                   <td   ><%= link_to "Login to Invite Summoner".html_safe, login_path, :class =>"btn btn-success" %></td>
                   <td  ><%= link_to "Sign Up and Invite Summoner".html_safe, new_profile_path, :class =>"btn btn-primary" %></td>
-                 <% end %>
+                <% end %>
                 <td ><%= link_to "Dismiss Search".html_safe, root_path, :class =>"btn btn-danger" %></td>
               <% else %>
                 <td  colspan="3" scope="colgroup"><%= link_to "Dismiss Search".html_safe, root_path, :class =>"btn btn-danger" %></td>

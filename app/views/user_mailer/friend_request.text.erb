@@ -1,0 +1,7 @@
+Hi <%= @friend.name %>,
+<%= @user.name %> would like to add you as a Summoner Friend on LeagueSpec. Having summoner friends on LeagueSpec allows you to 
+    keep track of their activity and have a better LoL experience. Click on the link below to view this and other summoner requests:
+
+<%= link_to "View Request", edit_account_activation_url(@user.activation_token, email: @user.email) %>
+
+This is an unattended email address. Do not reply

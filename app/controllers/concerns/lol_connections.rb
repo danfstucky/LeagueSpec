@@ -33,6 +33,7 @@ module LolConnections
     @hkdrChamp = @champsReq.get('champion', @highestKillDeathRatioChampObj[0].id)
     get_highest_WLR_champ
     @hwlrChamp = @champsReq.get('champion', @highestWinLossRatioChampObj[0].id)
+    @registeredUser = User.find_summoner_by_name(@name)
   end
   
   def get_most_played_champ

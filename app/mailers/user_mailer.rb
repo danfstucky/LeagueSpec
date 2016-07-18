@@ -19,4 +19,11 @@ class UserMailer < ApplicationMailer
     @user = user
     mail to: user.email, subject: "League Spec password reset"
   end
+  
+  def friendship_request(friendship)
+    @user = friendship.user
+    @friend = friendship.friend
+    mail to: friendship.friend.email, subject: "League Spec Friend Request"
+  end
+
 end

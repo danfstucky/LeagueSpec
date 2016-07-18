@@ -19,4 +19,5 @@ Rails.application.routes.draw do
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
   get 'search_summoner', to: 'search#search'
+  get 'friendship_new', to: 'friendships#create'
 end

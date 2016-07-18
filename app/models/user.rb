@@ -1,4 +1,13 @@
 class User < ActiveRecord::Base
+	
+ #friendship associations
+  has_many :friendships, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
+  has_many :friends, :through => :friendships
+  has_many :accepted_friendships, -> { where('friendship_status_id = ?', 2) }, :class_name => "Friendship"
+  has_many :pending_friendships, -> { where('initiator = ? AND friendship_status_id = ?', false, 1) }, :class_name => "Friendship"
+  has_many :friendships_initiated_by_me, -> { where('initiator = ?', true) }, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
+  has_many :friendships_not_initiated_by_me, -> { where('initiator = ?', false) }, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
+  has_many :occurences_as_friend, :class_name => "Friendship", :foreign_key => "friend_id", :dependent => :destroy
 	attr_accessor :remember_token, :activation_token, :reset_token
 	before_save :downcase_email
 	before_create :create_activation_digest
@@ -75,6 +84,10 @@ class User < ActiveRecord::Base
 		where(name: summoner_name).first
 	end
 
+	def has_reached_daily_friend_request_limit?
+    friendships_initiated_by_me.where('created_at > ?', Time.now.beginning_of_day).count >= Friendship.daily_request_limit
+  end
+
 	private
 
 	#Converts email to all lower-case
@@ -87,6 +100,14 @@ class User < ActiveRecord::Base
 		self.activation_token = User.new_token
 		self.activation_digest = User.digest(activation_token)
 	end
+
+	def can_request_friendship_with(user)
+    !self.eql?(user) && !self.friendship_exists_with?(user)
+  end
+
+  def friendship_exists_with?(friend)
+    Friendship.where("user_id = ? AND friend_id = ?", self.id, friend.id).first
+  end
 
   
 end
