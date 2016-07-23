@@ -62,7 +62,7 @@
 							<small class="text">K-D Ratio: <% if champion.stats.total_deaths_per_session >  0 %>
 	                                                <%= "#{((champion.stats.most_champion_kills_per_session.to_f)/(champion.stats.total_deaths_per_session)).round(2)}"%>
 	                                              <%else%>
-	                                                <%= "#{(champion.stats.most_champion_kills_per_session_f.round(2))}"%>
+	                                                <%= "#{(champion.stats.most_champion_kills_per_session.to_f.round(2))}"%>
 	                                              <%end%>
 							</small><br>
 	          </td>

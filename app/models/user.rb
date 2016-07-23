@@ -84,9 +84,7 @@ class User < ActiveRecord::Base
 		where(name: summoner_name).first
 	end
 
-	def has_reached_daily_friend_request_limit?
-    friendships_initiated_by_me.where('created_at > ?', Time.now.beginning_of_day).count >= Friendship.daily_request_limit
-  end
+	
 
 	private
 
@@ -109,5 +107,8 @@ class User < ActiveRecord::Base
     Friendship.where("user_id = ? AND friend_id = ?", self.id, friend.id).first
   end
 
+  def has_reached_daily_friend_request_limit?
+    friendships_initiated_by_me.where('created_at > ?', Time.now.beginning_of_day).count >= Friendship.daily_request_limit
+  end
   
 end
