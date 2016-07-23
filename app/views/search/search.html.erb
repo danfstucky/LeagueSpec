@@ -26,7 +26,7 @@
 				    		                                    <% if @highestKillDeathRatioChampObj[0].stats.total_deaths_per_session >  0 %>
 		                                                  <%= " - (#{((@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session.to_f)/(@highestKillDeathRatioChampObj[0].stats.total_deaths_per_session)).round(2)})"%>
 		                                                <%else%>
-		                                                  <%= " - (#{(@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session_f.round(2))})"%>
+		                                                  <%= " - (#{(@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session.to_f.round(2))})"%>
 		                                                <%end%>
 			        	</td>
 			        <% else %>
@@ -40,7 +40,7 @@
 			    		                                    <% if @highestWinLossRatioChampObj[0].stats.total_deaths_per_session >  0 %>
 	                                                  <%= " - (#{((@highestWinLossRatioChampObj[0].stats.most_champion_kills_per_session.to_f)/(@highestWinLossRatioChampObj[0].stats.total_deaths_per_session)).round(2)})"%>
 	                                                <%else%>
-	                                                  <%= " - (#{(@highestWinLossRatioChampObj[0].stats.most_champion_kills_per_session_f.round(2))})"%>
+	                                                  <%= " - (#{(@highestWinLossRatioChampObj[0].stats.most_champion_kills_per_session.to_f.round(2))})"%>
 	                                                <%end%>
 	              </td>
 		          <% end %>
