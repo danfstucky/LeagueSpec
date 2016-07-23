@@ -61,7 +61,7 @@
             <%if logged_in? %>		      
 			      	<% if @statsObj %>
                 <% if @registeredUser %><!--more logic needed here to confirm that user is not already a friend-->
-                  <td><%= link_to "Add Summoner", friendship_new_path(summoner_to_add: params[:summoner]), :class =>"btn btn-success" %></td>
+                  <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), :class =>"btn btn-success" %></td>
                   <td ><%= link_to "View Profile", profile_path(@registeredUser.id), :class =>"btn btn-primary" %></td>
                   <td ><%= link_to "Dismiss Search", profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
                 <% else %>

@@ -1,4 +1,5 @@
 class Friendship < ActiveRecord::Base
+  include TokenContext
 	enum friendship_status: [ :denied, :pending, :accepted]
 	@@daily_request_limit = 12
   cattr_accessor :daily_request_limit
@@ -44,5 +45,10 @@ class Friendship < ActiveRecord::Base
 	def send_friend_request_email
 		UserMailer.friendship_request(self).deliver_now
 	end
+
+  def create_friendship_request_digest
+    self.friendship_request_token = User.new_token
+    self.activation_digest = User.digest(activation_token)
+  end
 
 end
