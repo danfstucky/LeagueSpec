@@ -25,6 +25,7 @@ class UserMailer < ApplicationMailer
   def friendship_request(friendship)
     @user = friendship.user
     @friend = friendship.friend
+    @friendship = friendship
     mail to: friendship.friend.email, subject: "League Spec Friend Request"
     mail from: "friendship-request@leaguespec.com"
   end

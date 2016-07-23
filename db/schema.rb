@@ -11,14 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160717143044) do
+ActiveRecord::Schema.define(version: 20160723204642) do
 
   create_table "friendships", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "friend_id"
-    t.boolean  "initiator",         default: false
+    t.boolean  "initiator",                 default: false
     t.datetime "created_at"
-    t.integer  "friendship_status", default: 1
+    t.integer  "friendship_status",         default: 1
+    t.string   "friendship_request_digest"
+    t.datetime "request_responded_at"
   end
 
   create_table "summoners", force: :cascade do |t|

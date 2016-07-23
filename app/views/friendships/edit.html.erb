@@ -1,1 +1,49 @@
-<h4>Friendship Information is Coming %><h4>
+<div class = "summoner-request-page" id="summoner-request">
+  
+  <div class = "col-md-5 col-md-offset-3">
+  	<div class="table-responsive">
+		  <table class="table search-table" cellspacing="0" style="border-spacing: 0;">
+		    <thead>
+		    	<tr>
+		    		<th colspan="3" scope="colgroup" class="header search-header">Friend Request from @requester.name.capitalize</th>
+		    	</tr>
+		    </thead>
+		    <tbody>
+		      <tr>
+	        	<td ><strong>Summoner Name: <%= @requester.name.capitalize %></strong></td>
+            <td ><strong>Most Played Champ: <%= "#{@mpChamp[:name]}"%> </strong><%= " - (#{@mostPlayedChampObj.stats.total_sessions_played}x)"%></td>
+        	  <td class="champ-img" rowspan="3" scope="rowgroup"><%= link_to image_tag("icons/#{@mpChamp[:name].delete(' ')}Square.png"), champion_path(@mpChamp.id)  %></td>
+	        </tr>
+	        <tr>
+	        	<td ><strong>Summoner Level: <%= @summoner.summoner_level %></strong></td>
+	        	<td ><strong>Highest KDR Champ: <%= "#{@hkdrChamp[:name]}"%> </strong> 
+			    		                                    <% if @highestKillDeathRatioChampObj[0].stats.total_deaths_per_session >  0 %>
+	                                                  <%= " - (#{((@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session.to_f)/(@highestKillDeathRatioChampObj[0].stats.total_deaths_per_session)).round(2)})"%>
+	                                                <%else%>
+	                                                  <%= " - (#{(@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session.to_f.round(2))})"%>
+	                                                <%end%>
+		        </td>
+		      </tr>
+	        <tr>
+	          <td ><strong>Last Active: <%= @summoner.revision_date.to_s.slice(0,10) %></strong></td>
+	          <td ><strong>Highest WLR Champ: <%= "#{@hwlrChamp[:name]}"%> </strong> 
+		    		                                    <% if @highestWinLossRatioChampObj[0].stats.total_deaths_per_session >  0 %>
+                                                  <%= " - (#{((@highestWinLossRatioChampObj[0].stats.most_champion_kills_per_session.to_f)/(@highestWinLossRatioChampObj[0].stats.total_deaths_per_session)).round(2)})"%>
+                                                <%else%>
+                                                  <%= " - (#{(@highestWinLossRatioChampObj[0].stats.most_champion_kills_per_session.to_f.round(2))})"%>
+                                                <%end%>
+            </td>
+	        </tr>
+		    </tbody>
+		    <tfoot>
+		      <tr data-no-turbolink>
+            <td><%= link_to "Accept Request", new_friendship_url(summoner_to_add: params[:summoner]), :class =>"btn btn-success" %></td>
+            <td ><%= link_to "Deny Request", profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
+            <td ><%= link_to "Ignore Request", profile_path(@current_user.id), :class =>"btn btn-default" %></td>
+          </tr>
+		    </tfoot>
+		  </table>
+    </div>
+  </div>
+</div>
+

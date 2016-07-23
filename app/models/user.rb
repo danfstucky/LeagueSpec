@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-	include TokenContext
+	extend TokenContext
+  include Tokenizer
  #friendship associations
   has_many :friendships, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
   has_many :friends, :through => :friendships
@@ -22,29 +23,9 @@ class User < ActiveRecord::Base
 	validates :password, length: { minimum: 6 }
 	# add in api cross reference later to verify summoner name exists in lol db
 
-	# Returns the hash digest of the given string.
-
-	def User.digest(string)
-		cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
-		BCrypt::Password.create(string, cost: cost)
-	end
-
-	# Returns a random token.
-	def User.new_token
-		SecureRandom.urlsafe_base64
-	end
-
 	def remember
 		self.remember_token = User.new_token
 		update_attribute(:remember_digest, User.digest(remember_token))
-	end
-
-	# Returns true if the given token matches the digest.
-	def authenticated?(attribute, token)
-		digest = send("#{attribute}_digest")
-		return false if digest.nil?
-		#return false if remember_digest.nil?
-		BCrypt::Password.new(digest).is_password?(token)
 	end
 
 	# Forgets a user.

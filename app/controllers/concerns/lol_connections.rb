@@ -133,8 +133,23 @@ module LolConnections
   def search_summoner
     create_search_connection
     begin
-        @summoner = @summonerReq.by_name(params[:summoner].downcase).first
-        get_summoner_ranked_stats(@summoner.id)
+      @summoner = @summonerReq.by_name(params[:summoner].downcase).first
+      get_summoner_ranked_stats(@summoner.id)
+    rescue Lol::NotFound => e
+      if e.message == '404 Not Found'
+        return
+      end
+    end
+    get_search_stats
+  end
+
+#Look up information about the person sending the summoner request
+  def search_summoner_for_request_action
+    create_search_connection
+    begin
+      @requester = User.find_by(email: params[:requester_email])
+      @summoner = @summonerReq.by_name(@requester.name).first
+      get_summoner_ranked_stats(@summoner.id)
     rescue Lol::NotFound => e
       if e.message == '404 Not Found'
         return
