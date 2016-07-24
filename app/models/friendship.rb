@@ -3,8 +3,8 @@ class Friendship < ActiveRecord::Base
   include Tokenizer
 	enum friendship_status: [ :denied, :pending, :accepted]
   attr_accessor :friendship_request_token
-	@@daily_request_limit = 12
-  cattr_accessor :daily_request_limit
+	cattr_accessor :daily_request_limit
+  @@daily_request_limit = 12
   belongs_to :user, :foreign_key => "user_id", :class_name => "User"
 	belongs_to :friend, :foreign_key => "friend_id", :class_name => "User" 
   validates_presence_of   :user
@@ -41,8 +41,9 @@ class Friendship < ActiveRecord::Base
   end
   
   def self.friends?(user, friend)
-    where("user_id = ? AND friend_id = ? AND friendship_status = ?", user.id, friend.id, 2).first
+    Friendship.exists?(user_id: user.id, friend_id: friend.id, friendship_status: 2)
   end
+
 
   # Sends a friend request email
 	def send_friend_request_email
@@ -56,6 +57,11 @@ class Friendship < ActiveRecord::Base
 
   def accept_friend_request
     update_attribute(:friendship_status, 2)
+    update_attribute(:request_responded_at, Time.zone.now)
+  end
+
+  def deny_friend_request
+    update_attribute(:friendship_status, 0)
     update_attribute(:request_responded_at, Time.zone.now)
   end
 
