@@ -13,13 +13,13 @@
 		 		<td class="bio-text-left">
 					<span class="text">Summoner Level:  <%= "#{@summonerObj.summoner_level}" %></span><br>
 					<span class="text">Summoner ID:  <%= "#{@summonerObj.id}" %></span><br>
-					<span class="text">Joined LeagueSpec: <%= "#{@user.created_at.to_s.slice(0,10)}" %></span><br><br>
+					<span class="text">Joined LeagueSpec: <%= "#{time_ago_in_words(@user.created_at)}".capitalize %> ago</span><br><br>
 				</td>
 				<td class="bio-text-right">
 	      	<span class="text">Overall KDR: <%= "#{@overallKillDeathRatio}" %></span><br>
 					<span class="text">Overall WLR: <%= "#{@overallWinLossRatio}" %></span><br>
-					<span class="text">LoL Last Active: <%= "#{@summonerObj.revision_date.to_s.slice(0,10)}" %></span><br>
-	      </td>
+					<span class="text">LoL Last Active: <%= "#{time_ago_in_words(@summonerObj.revision_date)}".capitalize %> ago</span><br>
+				</td>
 		  </tr>
 	  </table>
 	</div>
@@ -69,8 +69,7 @@
 			  	</tr>
 		  	<% end %>
 		  </table>
-			
-	</div>
+		</div>
   <div class = "col-md-4 wlr-champs">
     <table class = "stats-table no-spacing" cellspacing="0">
 	  	<tr >

@@ -29,6 +29,20 @@ class FriendshipsController < ApplicationController
     
   end
 
+  def index
+    @friends_list_code = params[:friends_list_code]
+    @user = current_user
+    if @friends_list_code == '0'
+      @friend_count = @user.accepted_friendships.count
+      @friendships = @user.friendships.accepted.paginate(page: params[:page], per_page: 5)
+    elsif @friends_list_code == '1'
+    #This might include intensive logic...to be completed
+    else 
+      @pending_friendships_count = @user.pending_friendships.count
+      @friendships = @user.friendships.pending.paginate(page: params[:page], per_page: 5)
+    end      
+  end
+
   def decide
     @requester = User.find_by(email: params[:requester_email])
     @friendship = @user.friendships_not_initiated_by_me.find_by(friend_id: @requester.id)

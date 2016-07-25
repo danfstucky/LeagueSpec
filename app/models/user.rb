@@ -4,8 +4,9 @@ class User < ActiveRecord::Base
  #friendship associations
   has_many :friendships, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
   has_many :friends, :through => :friendships
-  has_many :accepted_friendships, -> { where('friendship_status_id = ?', 2) }, :class_name => "Friendship"
-  has_many :pending_friendships, -> { where('initiator = ? AND friendship_status_id = ?', false, 1) }, :class_name => "Friendship"
+  has_many :accepted_friendships, -> { where('friendship_status = ?', 2) }, :class_name => "Friendship"
+  has_many :denied_friendships, -> { where('friendship_status = ?', 0) }, :class_name => "Friendship"
+  has_many :pending_friendships, -> { where('friendship_status = ?', 1) }, :class_name => "Friendship"
   has_many :friendships_initiated_by_me, -> { where('initiator = ?', true) }, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
   has_many :friendships_not_initiated_by_me, -> { where('initiator = ?', false) }, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
   has_many :occurences_as_friend, :class_name => "Friendship", :foreign_key => "friend_id", :dependent => :destroy
