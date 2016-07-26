@@ -60,8 +60,14 @@
 		      <tr data-no-turbolink>
             <%if logged_in? %>		      
 			      	<% if @statsObj %>
-                <% if @registeredUser %><!--more logic needed here to confirm that user is not already a friend-->
-                  <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), :class =>"btn btn-success" %></td>
+                <% if @registeredUser && @registeredUser.activated %><!--Confirm that user is not already a friend-->
+                  <% if @current_user.accepted_friendships.exists?(friend_id: @registeredUser.id) %>
+                    <td><%= link_to "Already Added", :class =>"btn btn-success" %></td>
+                  <% elsif @current_user.pending_friendships.exists?(friend_id: @registeredUser.id)%>
+                    <td><%= link_to "Request Pending", :class =>"btn btn-default" %></td>
+                  <% else %>
+                    <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), :class =>"btn btn-success" %></td>
+                  <% end %>
                   <td ><%= link_to "View Profile", profile_path(@registeredUser.id), :class =>"btn btn-primary" %></td>
                   <td ><%= link_to "Dismiss Search", profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
                 <% else %>

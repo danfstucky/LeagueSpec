@@ -12,7 +12,7 @@
 	  border: 1px solid black;
 	  cellpadding: 0;
 	  background: linear-gradient(#c8bbb6, #f4f2f1);
-	  .request-header{
+	  .request-header, .friends-list-header{
 	    text-align: center;
 	    font-size: 1.7em;
 	  }
@@ -38,6 +38,9 @@
 	    border: 2px solid black;
 	    border-radius: 5px;
 	  }
-
 	}
+
+	.friend-row {
+    border: 1px solid black;
+  }
 }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160723204642) do
+ActiveRecord::Schema.define(version: 20160726034616) do
 
   create_table "friendships", force: :cascade do |t|
     t.integer  "user_id"
@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(version: 20160723204642) do
   create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.string   "password_digest"
     t.string   "remember_digest"
     t.string   "activation_digest"
@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 20160723204642) do
     t.datetime "activated_at"
     t.string   "reset_digest"
     t.datetime "reset_sent_at"
+    t.boolean  "logged_in",         default: false
+    t.datetime "last_logged_in",    default: '1900-01-01 00:00:00'
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

@@ -1,24 +1,32 @@
 <% obj.each do |friendship| %>
-<tbody>
+<tbody class = "friend-row">
 	<tr>
-		<td ><strong>Friend Name: <%= friendship.friend.name.capitalize %></strong></td>
-	  <td ><strong>Friends Since: <%= "#{time_ago_in_words(friendship.request_responded_at)}".capitalize %> ago</td>
+		<td ><strong>Summoner Name: <%= friendship.friend.name.capitalize %></strong></td>
+		<% if @friends_list_code == '2' %> 
+		  <td ><strong> <%if friendship.initiator == false %>
+		                  Received: 
+		                <% else %>
+		                  Sent: 
+		                <% end %> 
+		    <%= "#{time_ago_in_words(friendship.created_at)}".capitalize %> ago</strong></td>
+		<% else %>
+		  <td ><strong>Friends Since: <%= "#{time_ago_in_words(friendship.request_responded_at)}".capitalize %> ago</strong></td>
+		<% end %>
 	  <td class="champ-img" rowspan="3" scope="rowgroup"><%= link_to image_tag("icons/AhriSquare.png"), profile_path(friendship.friend.id)  %></td>
 	</tr>
 	<tr>
 		<td ><strong>Friendship Status: <%= friendship.friendship_status.capitalize %></strong></td>
-	  <td ><strong>Member Since: <%= "#{time_ago_in_words(friendship.friend.created_at)}".capitalize %> ago</td>
+	  <td ><strong>Member Since: <%= "#{time_ago_in_words(friendship.friend.created_at)}".capitalize %> ago</strong></td>
 	</tr>
-</tbody>
-<tfoot>
 	<tr data-no-turbolink>
-	  <td><%= link_to "View Summoner Profile", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: '2'), :class =>"btn btn-success" %></td>
+	  <td><%= link_to "View Summoner Profile", profile_path(friendship.friend.id), :class =>"btn btn-success" %></td>
 	  <% if @friends_list_code == '2' %> 
-		  <td ><%= link_to "Accept as Friend", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: '0'), :class =>"btn btn-danger" %></td>
+	    <%if friendship.initiator == false %>
+	    <td ><%= link_to  "Accept Request", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: '0'), :class =>"btn btn-danger" %></td>
+	    <% end %>
 		<% else %>
 		  <td ><%= link_to "Remove from Friends List", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: '0'), :class =>"btn btn-danger" %></td>
 		<% end %>
-	  
 	</tr>
-</tfoot>
+</tbody>
 <% end %>
