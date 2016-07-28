@@ -1,80 +1,94 @@
-<div class="profile-overview col-md-12">
-  <div class="row">
-    <div class="col-md-2 profile-pic" >
-		  <%= image_tag("ahri_lol_small.png", class:" img-circle img-responsive") %>
-	  </div>
-    <div class="summoner-id col-md-8">
-	    <h1><%= "#{@user.name.capitalize}" %></h1>
-	  </div>
-	</div>
-	<div class="col-md-9 col-md-offset-2 profile-info">
-		<table style="width:100%" >
-		  <tr>
-		 		<td class="bio-text-left">
-					<span class="text">Summoner Level:  <%= "#{@summonerObj.summoner_level}" %></span><br>
-					<span class="text">Summoner ID:  <%= "#{@summonerObj.id}" %></span><br>
-					<span class="text">Joined LeagueSpec: <%= "#{@user.created_at.to_s.slice(0,10)}" %></span><br><br>
-				</td>
-				<td class="bio-text-right">
-	      	<span class="text">Overall KDR: <%= "#{@overallKillDeathRatio}" %></span><br>
-					<span class="text">Overall WLR: <%= "#{@overallWinLossRatio}" %></span><br>
-					<span class="text">LoL Last Active: <%= "#{@summonerObj.revision_date.to_s.slice(0,10)}" %></span><br>
-	      </td>
-		  </tr>
-	  </table>
-	</div>
-  
-	  
-  <div class="row edit-button">
-			<button class="btn btn-default pull-right"><i class="glyphicon glyphicon-pencil"></i> Edit Player Info</button>
+<div class="profile-overview">
+	  <div class="summoner-header">
+			<h1><%= @user.name.capitalize %></h1>
+		  <div class="edit-button pull-right">
+				<button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Edit Player Info</button>
+			</div>
+		</div>
+		
+
+	<div class="profile-info">
+		<div class="row">
+			<div class="col-md-2 profile-pic" >
+				<%= image_tag("ahri_lol_small.png", class:"img-circle img-responsive") %>
+			</div>
+			<div class="bio-table-left col-md-5">
+				<table class="bio-text">
+				  <tr>
+						<th>Summoner Level:</th>
+						<td><%= @summonerObj.summoner_level %></td>
+					</tr>
+					<tr>
+						<th>Summoner ID:</th>
+						<td><%= @summonerObj.id %></td>
+					</tr>
+					<tr>
+						<th>Joined LeagueSpec:</th>
+						<td><%= @user.created_at.to_s.slice(0,10) %></td>
+					</tr>
+				</table>
+			</div>
+			<div class="bio-table-right col-md-5">
+				<table class="bio-text">
+			  	<tr>
+			      <th>Overall KDR:</th>
+			      <td><%= @overallKillDeathRatio %></td>
+			    </tr>
+			    <tr>
+						<th>Overall WLR:</th>
+						<td><%= @overallWinLossRatio %></td>
+					</tr>
+					<tr>
+						<th>LoL Last Active:</th>
+						<td><%= @summonerObj.revision_date.to_s.slice(0,10) %></td>
+		      </tr>
+			  </table>
+			</div>
+		</div>
 	</div>
 </div>
 
 <div class="container spec-social">	
-  <div class="col-md-12">
-  	<div class="row">
-	  	<div class="header champions-header">
-	  		<h3>Featured Champions</h3>
-	    </div>
-    </div>	
+	<div class="header champions-header">
+		<h3>Featured Champions</h3>
   </div>
-  	<div class = "col-md-4 kdr-champs">
-		  <table class = "stats-table no-spacing" cellspacing="0">
-		  	<tr >
-		  		<th colspan="3" class = "header">
-		  			<h4>Ranked by KDR</h4>
-		  		</th>
+
+	<div class="col-md-4">
+	  <table class="stats-table">
+	  	<tr>
+	  		<th colspan="3" class="header"><h4>Ranked by KDR</h4></th>
+	  	</tr>
+	  	<% @highestKillDeathRatioChampObj.each do |champion| %>
+		    <% thisChampObj = @champsReq.get('champion', champion.id)%>
+		  	<tr class="champ-row">
+		  		<td class="champ-img">
+		  			<%= link_to image_tag("icons/#{thisChampObj[:name].delete(' ')}Square.png"), champion_path(champion.id) %>
+		  		</td>
+		  		<td class="stat">
+		  			<small>ID: <%= thisChampObj[:id] %></small><br>
+						<small>Name: <%= thisChampObj[:name] %></small><br>
+						<small>Title: <%= thisChampObj[:title].titleize %></small><br>
+		  		</td>
+          <td class="stat right-stat pull-right">
+          	<small>Champ Kills: <%= champion.stats.most_champion_kills_per_session %></small><br>
+						<small>Champ Deaths: <%= champion.stats.total_deaths_per_session %></small><br>
+						<small>K-D Ratio: 
+							<% if champion.stats.total_deaths_per_session > 0 %>
+                <%= (champion.stats.most_champion_kills_per_session.to_f / champion.stats.total_deaths_per_session).round(2) %>
+              <%else%>
+                <%= champion.stats.most_champion_kills_per_session.to_f.round(2) %>
+              <%end%>
+						</small><br>
+          </td>
 		  	</tr>
-		  	<% @highestKillDeathRatioChampObj.each do |champion| %>
-			    <% thisChampObj = @champsReq.get('champion', champion.id)%>
-			  	<tr class="champ-row">
-			  		<td class="champ-img">
-			  			<%= link_to image_tag("icons/#{thisChampObj[:name].delete(' ')}Square.png"), champion_path(champion.id)  %>
-			  		</td>
-			  		<td  class="stat">
-			  			<small class="text">ID: <%= "#{thisChampObj[:id]}" %></small><br>
-							<small class="text">Name:  <%= "#{thisChampObj[:name]}" %></small><br>
-							<small class="text">Title: <%= "#{thisChampObj[:title].titleize}" %></small><br>
-			  		</td>
-	          <td class="stat right-stat pull-right">
-	          	<small class="text">Champ Kills: <%= "#{champion.stats.most_champion_kills_per_session}" %></small><br>
-							<small class="text">Champ Deaths:  <%= "#{champion.stats.total_deaths_per_session}" %></small><br>
-							<small class="text">K-D Ratio: <% if champion.stats.total_deaths_per_session >  0 %>
-	                                                <%= "#{((champion.stats.most_champion_kills_per_session.to_f)/(champion.stats.total_deaths_per_session)).round(2)}"%>
-	                                              <%else%>
-	                                                <%= "#{(champion.stats.most_champion_kills_per_session.to_f.round(2))}"%>
-	                                              <%end%>
-							</small><br>
-	          </td>
-			  	</tr>
-		  	<% end %>
-		  </table>
-			
+	  	<% end %>
+	  </table>
 	</div>
-  <div class = "col-md-4 wlr-champs">
-    <table class = "stats-table no-spacing" cellspacing="0">
-	  	<tr >
-	  		<th colspan="3" class = "header">
+
+  <div class="col-md-4">
+    <table class="stats-table">
+	  	<tr>
+	  		<th colspan="3" class="header">
 	  			<h4>Ranked by WLR</h4>
 	  		</th>
 	  	</tr>
@@ -82,21 +96,22 @@
 		    <% thisChampObj = @champsReq.get('champion', champion.id)%>
 		  	<tr class="champ-row">
 		  		<td class="champ-img">
-		  			<%= link_to image_tag("icons/#{thisChampObj[:name].delete(' ')}Square.png"), champion_path(champion.id)  %>
+		  			<%= link_to image_tag("icons/#{thisChampObj[:name].delete(' ')}Square.png"), champion_path(champion.id) %>
 		  		</td>
-		  		<td  class="stat">
-		  			<small class="text">ID: <%= "#{thisChampObj[:id]}" %></small><br>
-						<small class="text">Name:  <%= "#{thisChampObj[:name]}" %></small><br>
-						<small class="text">Title: <%= "#{thisChampObj[:title].titleize}" %></small><br>
+		  		<td class="stat">
+		  			<small>ID: <%= thisChampObj[:id] %></small><br>
+						<small>Name: <%= thisChampObj[:name] %></small><br>
+						<small>Title: <%= thisChampObj[:title].titleize %></small><br>
 		  		</td>
 	        <td class="stat right-stat pull-right">
-	        	<small class="text">Wins: <%= "#{champion.stats.total_sessions_won}" %></small><br>
-						<small class="text">Losses:  <%= "#{champion.stats.total_sessions_lost}" %></small><br>
-						<small class="text">W-L Ratio: <% if champion.stats.total_sessions_lost >  0 %>
-	                                                          <%= "#{((champion.stats.total_sessions_won.to_f)/(champion.stats.total_sessions_lost)).round(2)}"%>
-	                                                  <% else %>
-	                                                        <%= "#{(champion.stats.total_sessions_won.to_f.round(2))}"%>
-	                                                  <% end %>
+	        	<small>Wins: <%= champion.stats.total_sessions_won %></small><br>
+						<small>Losses: <%= champion.stats.total_sessions_lost %></small><br>
+						<small>W-L Ratio: 
+							<% if champion.stats.total_sessions_lost > 0 %>
+	              <%= (champion.stats.total_sessions_won.to_f / champion.stats.total_sessions_lost).round(2) %>
+              <% else %>
+                <%= champion.stats.total_sessions_won.to_f.round(2) %>
+              <% end %>
 						</small><br>
 	        </td>
 		  	</tr>
@@ -104,10 +119,10 @@
 	  </table>
 	</div>
 
-	<div class = "col-md-4 most-played-champs">
-    <table class = "stats-table no-spacing" cellspacing="0">
-	  	<tr >
-	  		<th colspan="3" class = "header">
+	<div class="col-md-4">
+    <table class="stats-table">
+	  	<tr>
+	  		<th colspan="3" class="header">
 	  			<h4>Most Played</h4>
 	  		</th>
 	  	</tr>
@@ -115,18 +130,18 @@
 		    <% thisChampObj = @champsReq.get('champion', champion.id)%>
 		  	<tr class="champ-row">
 		  		<td class="champ-img">
-		  			<%= link_to image_tag("icons/#{thisChampObj[:name].delete(' ')}Square.png"), champion_path(champion.id)  %>
+		  			<%= link_to image_tag("icons/#{thisChampObj[:name].delete(' ')}Square.png"), champion_path(champion.id) %>
 		  		</td>
-		  		<td  class="stat">
-		  			<small class="text">ID: <%= "#{thisChampObj[:id]}" %></small><br>
-						<small class="text">Name:  <%= "#{thisChampObj[:name]}" %></small><br>
-						<small class="text">Title: <%= "#{thisChampObj[:title].titleize}" %></small><br>
+		  		<td class="stat">
+		  			<small>ID: <%= thisChampObj[:id] %></small><br>
+						<small>Name: <%= thisChampObj[:name] %></small><br>
+						<small>Title: <%= thisChampObj[:title].titleize %></small><br>
 		  		</td>
 	        <td class="stat right-stat pull-right">
-	        	<small class="text">Played: <%= "#{champion.stats.total_sessions_played}" %></small><br>
-									<small class="text">Wins:  <%= "#{champion.stats.total_sessions_won}" %></small><br>
-									<small class="text">Losses: <%= "#{champion.stats.total_sessions_lost}" %>
-									</small><br>
+	        	<small>Played: <%= champion.stats.total_sessions_played %></small><br>
+						<small>Wins: <%= champion.stats.total_sessions_won %></small><br>
+						<small>Losses: <%= champion.stats.total_sessions_lost %>
+						</small><br>
 	        </td>
 		  	</tr>
 	  	<% end %>
