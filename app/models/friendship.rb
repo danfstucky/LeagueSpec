@@ -20,7 +20,7 @@ class Friendship < ActiveRecord::Base
 
   def cannot_request_if_daily_limit_reached  
     if new_record? && initiator && user.has_reached_daily_friend_request_limit?
-      errors.add(:base, "Sorry, you'll have to wait a little while before requesting any more friendships.") 
+      errors.add(:base, "Daily friends request limit exceeded. Sorry, you'll have to wait a little while before requesting any more friendships.") 
     end
   end 
 
@@ -28,21 +28,19 @@ class Friendship < ActiveRecord::Base
     Friendship.where('user_id = ? and friend_id = ?', self.friend_id, self.user_id).first
   end
 
-  def denied?
-    friendship_status.eql?(0)
-  end
-  
-  def pending?
-    friendship_status.eql?(1)
-  end
-  
-  def accepted?
-    friendship_status.eql?(2)    
-  end
-  
   def self.friends?(user, friend)
     Friendship.exists?(user_id: user.id, friend_id: friend.id, friendship_status: 2)
   end
+
+  def self.denied_friendship?(user, friend)
+    Friendship.exists?(user_id: user.id, friend_id: friend.id, friendship_status: 0)
+  end
+
+  def self.pending_friendship?(user, friend)
+    Friendship.exists?(user_id: user.id, friend_id: friend.id, friendship_status: 1)
+  end
+
+
 
 
   # Sends a friend request email

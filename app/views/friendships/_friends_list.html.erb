@@ -2,7 +2,7 @@
 <tbody class = "friend-row">
 	<tr>
 		<td ><strong>Summoner Name: <%= friendship.friend.name.capitalize %></strong></td>
-		<% if @friends_list_code == '2' %> 
+		<% if @friends_list_code == 'pending' %> 
 		  <td ><strong> <%if friendship.initiator == false %>
 		                  Received: 
 		                <% else %>
@@ -12,17 +12,18 @@
 		<% else %>
 		  <td ><strong>Friends Since: <%= "#{time_ago_in_words(friendship.request_responded_at)}".capitalize %> ago</strong></td>
 		<% end %>
-	  <td class="champ-img" rowspan="3" scope="rowgroup"><%= link_to image_tag("icons/AhriSquare.png"), profile_path(friendship.friend.id)  %></td>
+	  <td class="champ-img" rowspan="3" scope="rowgroup"><span class="imgWrap"><%= link_to image_tag("icons/AhriSquare.png"), profile_path(friendship.friend.id)  %></span>
+    </td>
 	</tr>
 	<tr>
 		<td ><strong>Friendship Status: <%= friendship.friendship_status.capitalize %></strong></td>
 	  <td ><strong>Member Since: <%= "#{time_ago_in_words(friendship.friend.created_at)}".capitalize %> ago</strong></td>
 	</tr>
 	<tr data-no-turbolink>
-	  <% if @friends_list_code == '2' %> 
+	  <% if @friends_list_code == 'pending' %> 
 	    <%if friendship.initiator == false %>
-		    <td ><%= link_to  "Accept Request", decide_friendships_path(friend_email: current_user.email, requester_email: User.find(friendship.friend.id).email, request_token: '-321', response_code: '2'), :class =>"btn btn-success" %> </td>
-		    <td>	<%= link_to  "Deny Request", decide_friendships_path(friend_email: current_user.email, requester_email: User.find(friendship.friend.id).email, request_token: '-321', response_code: '0'), :class =>"btn btn-danger" %>
+		    <td ><%= link_to  "Accept Request", decide_friendships_path(friend_email: current_user.email, requester_email: User.find(friendship.friend.id).email, request_token: 'from-friends-list', response_code: 'accept'), :class =>"btn btn-success" %> </td>
+		    <td>	<%= link_to  "Deny Request", decide_friendships_path(friend_email: current_user.email, requester_email: User.find(friendship.friend.id).email, request_token: 'from-friends-list', response_code: 'deny'), :class =>"btn btn-danger" %>
 		    </td>
 		  <% else %>
 		    <td width="100%"><%= link_to "View Summoner Profile", profile_path(friendship.friend.id), :class =>"btn btn-success" %></td>

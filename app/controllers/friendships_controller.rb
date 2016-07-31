@@ -7,7 +7,7 @@ class FriendshipsController < ApplicationController
  
 	def new
     @user = current_user
-    @friend = User.find_by_name(params[:summoner_to_add])
+    @friend = User.find_by_name(params[:summoner_to_add].downcase)
     @friendship = Friendship.new(:user_id => @user.id, :friend_id => @friend.id, :initiator => true)
     reverse_friendship = Friendship.new(:user_id => @friend.id, :friend_id =>  @user.id)
     if (@friendship.save && reverse_friendship.save)
@@ -15,7 +15,7 @@ class FriendshipsController < ApplicationController
       flash[:info] = "Summoner request sent."
       redirect_to profile_path(@user.id)
     else
-    	flash[:info] = "Unable to send request, either there is a pending, accepted or denied request or you have reached your daily request limit."
+      flash[:danger] = @friendship.errors.messages[:base][0]
       redirect_to :back
     end
   end
@@ -32,10 +32,10 @@ class FriendshipsController < ApplicationController
   def index
     @friends_list_code = params[:friends_list_code]
     @user = current_user
-    if @friends_list_code == '0'
+    if @friends_list_code == 'all'
       @friend_count = @user.accepted_friendships.count
       @friendships = @user.friendships.accepted.paginate(page: params[:page], per_page: 5)
-    elsif @friends_list_code == '1'
+    elsif @friends_list_code == 'active'
       @friendships = @user.get_online_friends.paginate(page: params[:page], per_page: 5)
     else 
       @pending_friendships_count = @user.pending_friendships.count
@@ -47,20 +47,20 @@ class FriendshipsController < ApplicationController
     @requester = User.find_by(email: params[:requester_email])
     @friendship = @user.friendships_not_initiated_by_me.find_by(friend_id: @requester.id)
     if !Friendship.friends?(@user, @requester) 
-      if params[:request_token] == '-321' || @friendship.reverse.authenticated?(:friendship_request, params[:request_token])
-        if params[:response_code] == '2' 
+      if params[:request_token] == 'from-friends-list' || @friendship.reverse.authenticated?(:friendship_request, params[:request_token])
+        if params[:response_code] == 'accept' 
           @friendship.accept_friend_request
           @friendship.reverse.accept_friend_request
           flash[:success] = "Summoner request accepted!"
-          redirect_to friendships_url(friends_list_code: '0')
-        elsif params[:response_code] == '0'
+          redirect_to friendships_url(friends_list_code: 'all')
+        elsif params[:response_code] == 'deny'
           @friendship.deny_friend_request
           @friendship.reverse.deny_friend_request
           flash[:notice] = "Summoner request denied!"
-          redirect_to friendships_url(friends_list_code: '0')
+          redirect_to friendships_url(friends_list_code: 'all')
         else 
           flash[:notice] = "Summoner request ignored!"
-          redirect_to friendships_url(friends_list_code: '2')
+          redirect_to friendships_url(friends_list_code: 'pending')
         end
       else
         flash[:danger] = "Invalid request token. Make sure you click exact request link or request new friendship"
@@ -81,7 +81,7 @@ class FriendshipsController < ApplicationController
         @friendship.reverse.destroy
       end
       flash[:notice] = "Summoner deleted!"
-      redirect_to friendships_url(friends_list_code: '0')
+      redirect_to friendships_url(friends_list_code: 'all')
     else 
       flash[:danger] = "Unable to process request. Friendship does not exist with this summoner."
       redirect_to :back

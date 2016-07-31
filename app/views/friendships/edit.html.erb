@@ -37,9 +37,9 @@
 		    </tbody>
 		    <tfoot>
 		      <tr data-no-turbolink>
-            <td><%= link_to "Accept Request", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: '2'), :class =>"btn btn-success" %></td>
-            <td ><%= link_to "Deny Request", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: '0'), :class =>"btn btn-danger" %></td>
-            <td ><%= link_to "Ignore Request", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: '1'), :class =>"btn btn-default" %></td>
+            <td><%= link_to "Accept Request", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: 'accept'), :class =>"btn btn-success" %></td>
+            <td ><%= link_to "Deny Request", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: 'deny'), :class =>"btn btn-danger" %></td>
+            <td ><%= link_to "Ignore Request", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: 'ignore'), :class =>"btn btn-default" %></td>
           </tr>
 		    </tfoot>
 		  </table>

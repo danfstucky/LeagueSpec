@@ -4,15 +4,13 @@ class User < ActiveRecord::Base
  #friendship associations
   has_many :friendships, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
   has_many :friends, :through => :friendships
-  #has_many :active_friends, -> { where('friendship_status = ? AND friend.logged_in = ?', 2, true) }, :class_name => "Friendship"
   has_many :accepted_friendships, -> { where('friendship_status = ?', 2) }, :class_name => "Friendship"
   has_many :denied_friendships, -> { where('friendship_status = ?', 0) }, :class_name => "Friendship"
   has_many :pending_friendships, -> { where('friendship_status = ?', 1) }, :class_name => "Friendship"
   has_many :friendships_initiated_by_me, -> { where('initiator = ?', true) }, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
   has_many :friendships_not_initiated_by_me, -> { where('initiator = ?', false) }, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
-  has_many :occurences_as_friend, :class_name => "Friendship", :foreign_key => "friend_id", :dependent => :destroy
-	attr_accessor :remember_token, :activation_token, :reset_token
-	before_save :downcase_email
+  attr_accessor :remember_token, :activation_token, :reset_token
+	before_save :downcase_email, :downcase_name
 	before_create :create_activation_digest
 
 	validates :name,	presence: true, length: { maximum: 30 }
@@ -82,22 +80,14 @@ class User < ActiveRecord::Base
 		self.email = email.downcase
 	end
 
+	#Converts email to all lower-case
+	def downcase_name
+		self.name = name.downcase
+	end
+
 	# Creates and assigns the activation token and digest
 	def create_activation_digest
 		self.activation_token = User.new_token
 		self.activation_digest = User.digest(activation_token)
 	end
-
-	def can_request_friendship_with(user)
-    !self.eql?(user) && !self.friendship_exists_with?(user)
-  end
-
-  def friendship_exists_with?(friend)
-    Friendship.where("user_id = ? AND friend_id = ?", self.id, friend.id).first
-  end
-
-
-
-  
-  
 end
