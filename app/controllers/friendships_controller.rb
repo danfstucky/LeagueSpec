@@ -36,7 +36,7 @@ class FriendshipsController < ApplicationController
       @friend_count = @user.accepted_friendships.count
       @friendships = @user.friendships.accepted.paginate(page: params[:page], per_page: 5)
     elsif @friends_list_code == '1'
-    #This might include intensive logic...to be completed
+      @friendships = @user.get_online_friends.paginate(page: params[:page], per_page: 5)
     else 
       @pending_friendships_count = @user.pending_friendships.count
       @friendships = @user.friendships.pending.paginate(page: params[:page], per_page: 5)
@@ -47,23 +47,20 @@ class FriendshipsController < ApplicationController
     @requester = User.find_by(email: params[:requester_email])
     @friendship = @user.friendships_not_initiated_by_me.find_by(friend_id: @requester.id)
     if !Friendship.friends?(@user, @requester) 
-      if @friendship.reverse.authenticated?(:friendship_request, params[:request_token])
+      if params[:request_token] == '-321' || @friendship.reverse.authenticated?(:friendship_request, params[:request_token])
         if params[:response_code] == '2' 
           @friendship.accept_friend_request
           @friendship.reverse.accept_friend_request
           flash[:success] = "Summoner request accepted!"
-          #Change this to redirect to Accepted friends page
-          redirect_to profile_path(@user.id)
+          redirect_to friendships_url(friends_list_code: '0')
         elsif params[:response_code] == '0'
           @friendship.deny_friend_request
           @friendship.reverse.deny_friend_request
           flash[:notice] = "Summoner request denied!"
-          #Change this to redirect to Denied friends page
-          redirect_to profile_path(@user.id)
+          redirect_to friendships_url(friends_list_code: '0')
         else 
           flash[:notice] = "Summoner request ignored!"
-          #Change this to redirect to Pending friends page
-          redirect_to profile_path(@user.id)
+          redirect_to friendships_url(friends_list_code: '2')
         end
       else
         flash[:danger] = "Invalid request token. Make sure you click exact request link or request new friendship"

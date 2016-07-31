@@ -61,10 +61,8 @@
             <%if logged_in? %>		      
 			      	<% if @statsObj %>
                 <% if @registeredUser && @registeredUser.activated %><!--Confirm that user is not already a friend-->
-                  <% if @current_user.accepted_friendships.exists?(friend_id: @registeredUser.id) %>
-                    <td><%= link_to "Already Added", :class =>"btn btn-success" %></td>
-                  <% elsif @current_user.pending_friendships.exists?(friend_id: @registeredUser.id)%>
-                    <td><%= link_to "Request Pending", :class =>"btn btn-default" %></td>
+                  <% if @current_user.accepted_friendships.exists?(friend_id: @registeredUser.id) || @current_user.pending_friendships.exists?(friend_id: @registeredUser.id) %>
+                    <td class = "badge" ><%= "#{@current_user.friendships.find_by_friend_id(@registeredUser.id).friendship_status.capitalize} Request" %></td>
                   <% else %>
                     <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), :class =>"btn btn-success" %></td>
                   <% end %>
@@ -72,10 +70,10 @@
                   <td ><%= link_to "Dismiss Search", profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
                 <% else %>
                   <td ><%= link_to "Invite Friend", root_path, :class =>"btn btn-primary" %></td>
-                  <td   colspan="2" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
+                  <td colspan="2" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
                 <% end %>
 			      	<% else %>
-			      	  <td   colspan="3" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
+			      	  <td colspan="3" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
 			      	<% end %>
 			      <% else %>
 			        <% if @statsObj %>

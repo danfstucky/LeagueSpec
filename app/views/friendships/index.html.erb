@@ -6,7 +6,9 @@
 		    <thead>
 		    	<tr>
 		    		<th colspan="3" scope="colgroup" class="header friends-list-header">
-		    		<% if @friends_list_code == '0' %> 
+		    		<% if @friendships.empty? %> 
+		    		  <%= "No Summoner Friends" %>
+		    		<% elsif @friends_list_code == '0' %> 
 		    		  <%= "All Summoner Friends" %>
 		    		<% elsif @friends_list_code == '1' %>
 		    		  <%= "Active Summoner Friends" %>
@@ -19,7 +21,7 @@
 			    <div align="center">
 					  <%= will_paginate %>
 					</div>
-		      <%= render 'friends_list', obj: @friendships %>
+					  <%= render 'friends_list', obj: @friendships %>
 		      <div align="center">
 					  <%= will_paginate %>
 					</div>

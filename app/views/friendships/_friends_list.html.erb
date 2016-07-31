@@ -19,12 +19,17 @@
 	  <td ><strong>Member Since: <%= "#{time_ago_in_words(friendship.friend.created_at)}".capitalize %> ago</strong></td>
 	</tr>
 	<tr data-no-turbolink>
-	  <td><%= link_to "View Summoner Profile", profile_path(friendship.friend.id), :class =>"btn btn-success" %></td>
 	  <% if @friends_list_code == '2' %> 
 	    <%if friendship.initiator == false %>
-	    <td ><%= link_to  "Accept Request", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: '0'), :class =>"btn btn-danger" %></td>
+		    <td ><%= link_to  "Accept Request", decide_friendships_path(friend_email: current_user.email, requester_email: User.find(friendship.friend.id).email, request_token: '-321', response_code: '2'), :class =>"btn btn-success" %> </td>
+		    <td>	<%= link_to  "Deny Request", decide_friendships_path(friend_email: current_user.email, requester_email: User.find(friendship.friend.id).email, request_token: '-321', response_code: '0'), :class =>"btn btn-danger" %>
+		    </td>
+		  <% else %>
+		    <td width="100%"><%= link_to "View Summoner Profile", profile_path(friendship.friend.id), :class =>"btn btn-success" %></td>
+		    <td width="100%"><%= link_to "Delete Request", profile_path(friendship.friend.id), :class =>"btn btn-danger" %></td>
 	    <% end %>
 		<% else %>
+		  <td><%= link_to "View Summoner Profile", profile_path(friendship.friend.id), :class =>"btn btn-success" %></td>
 		  <td ><%= link_to "Remove from Friends List", decide_friendships_path(friend_email: params[:friend_email], requester_email: params[:requester_email], request_token: params[:id], response_code: '0'), :class =>"btn btn-danger" %></td>
 		<% end %>
 	</tr>

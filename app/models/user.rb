@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
  #friendship associations
   has_many :friendships, :class_name => "Friendship", :foreign_key => "user_id", :dependent => :destroy
   has_many :friends, :through => :friendships
+  #has_many :active_friends, -> { where('friendship_status = ? AND friend.logged_in = ?', 2, true) }, :class_name => "Friendship"
   has_many :accepted_friendships, -> { where('friendship_status = ?', 2) }, :class_name => "Friendship"
   has_many :denied_friendships, -> { where('friendship_status = ?', 0) }, :class_name => "Friendship"
   has_many :pending_friendships, -> { where('friendship_status = ?', 1) }, :class_name => "Friendship"
@@ -70,6 +71,10 @@ class User < ActiveRecord::Base
     friendships_initiated_by_me.where('created_at > ?', Time.now.beginning_of_day).count >= Friendship.daily_request_limit
   end
 
+  def get_online_friends
+  	accepted_friendships.joins("INNER JOIN users on friend_id = users.id").where("users.logged_in = ?", true)
+  end
+
 	private
 
 	#Converts email to all lower-case
@@ -90,6 +95,8 @@ class User < ActiveRecord::Base
   def friendship_exists_with?(friend)
     Friendship.where("user_id = ? AND friend_id = ?", self.id, friend.id).first
   end
+
+
 
   
   
