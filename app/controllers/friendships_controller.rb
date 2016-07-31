@@ -72,6 +72,22 @@ class FriendshipsController < ApplicationController
     end
   end
 
+  def destroy
+    @user = current_user
+    @friendship = Friendship.find(params[:id])
+    if @friendship
+      Friendship.transaction do
+        @friendship.destroy
+        @friendship.reverse.destroy
+      end
+      flash[:notice] = "Summoner deleted!"
+      redirect_to friendships_url(friends_list_code: '0')
+    else 
+      flash[:danger] = "Unable to process request. Friendship does not exist with this summoner."
+      redirect_to :back
+    end
+  end
+
   private
   def require_same_user
     @user = User.find_by(email: params[:friend_email])
