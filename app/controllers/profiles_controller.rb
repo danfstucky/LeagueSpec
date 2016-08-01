@@ -9,8 +9,8 @@ class ProfilesController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
-    
+    @user = current_user
+    @featured_stats = FeaturedStatsService.new(current_user).featured_stats
   end
 
   def new

@@ -58,7 +58,7 @@
 	  	<tr>
 	  		<th colspan="3" class="header"><h4>Ranked by KDR</h4></th>
 	  	</tr>
-	  	<% @highestKillDeathRatioChampObj.each do |champion| %>
+	  	<% @featured_stats[:top_kd].each do |champion| %>
 		    <% thisChampObj = @champsReq.get('champion', champion.id)%>
 		  	<tr class="champ-row">
 		  		<td class="champ-img">
@@ -148,6 +148,3 @@
 	  </table>
   </div>
 </div>	
-
-
-

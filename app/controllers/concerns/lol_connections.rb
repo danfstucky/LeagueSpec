@@ -16,6 +16,7 @@ module LolConnections
   end
 
    def create_search_connection
+    # This can be private
     create_summoner_connection
     create_champ_connection
   end
@@ -23,6 +24,7 @@ module LolConnections
   def get_summoner_ranked_stats(search_id)
     create_stats_connection
     @statsObj = statsReq.ranked(search_id, extra = {})
+    puts "Player Summary: #{@statsReq.ranked(@summonerObj.id)}"
     #Since the champion with id = 0 always returns 404 error and is used for error checking, it is being deleted from array.
     if @statsObj
       @statsObj.champions.delete_if{ |h| h.id == 0 }
@@ -114,7 +116,7 @@ module LolConnections
     end
     begin
       create_stats_connection
-      @statsObj = statsReq.ranked(@summonerObj.id, extra = {})
+      @statsObj = @statsReq.ranked(@summonerObj.id, extra = {})
     rescue Lol::NotFound => e
       if e.message == '404 Not Found'
         flash[:danger] = "Summoner stats were not found. Verify that summoner has been active in the last calendar year and try signing up again."
@@ -125,7 +127,9 @@ module LolConnections
 
   def get_summoner
     create_summoner_connection
+    puts "Inside get_summoner"
     @summonerObj = @summonerReq.by_name(User.find(params[:id]).name).first
+
     get_summoner_ranked_stats(@summonerObj.id)
     create_champ_connection
     get_most_played_champ
@@ -133,6 +137,8 @@ module LolConnections
     get_overall_KDR
     get_highest_KDR_champ
     get_highest_WLR_champ
+    #service = FeaturedStatsService.new(current_user)
+    #service.featured_stats
   end
   
   def search_summoner
