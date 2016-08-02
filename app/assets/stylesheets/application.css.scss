@@ -134,8 +134,8 @@ input {
 .navbar-default {
   background-color: black;
 
-  .navbar-collapse{
-    .search-form{
+  .navbar-collapse {
+    .search-form {
       margin-top:10px;
       display: inline;
     }   
@@ -205,18 +205,18 @@ td {
 	background-repeat: no-repeat;
 	background-size: cover;
 	padding-top: 20px;
-	.search-table{
+	.search-table {
     border-collapse: collapse;
     margin-top:60px;
 	  border: 1px solid black;
 	  cellpadding: 0;
 	  background: linear-gradient(#c8bbb6, #f4f2f1);
-	  .search-header{
+	  .search-header {
 	    text-align: center;
 	    font-size: 1.7em;
 	  }
 	}
-	.search-table td, .search-table th{
+	.search-table td, .search-table th {
 	  width: auto;
 	  padding: 5px;
 		border: 0px;
@@ -228,7 +228,7 @@ td {
 	    color: white;
 	    background: black;
 	  }
-    .champ-img{
+    .champ-img {
       width: 10%;
       vertical-align: middle;
     }
@@ -243,41 +243,40 @@ td {
 	height:100%;
 	
 
-  .champions-header{
+  .champions-header {
     margin-right: 20px;
     border-right: 1px solid black;
   }
 
-	.stats-table{
+	.stats-table {
     width: 100%;
     border-collapse: collapse;
 
-    .champ-img{
+    .champ-img {
       padding-left: 4.5px;
       width: 20px;
       padding-right: 4.5px;
       vertical-align: middle;
     }
 
-    .right-stat{
+    .right-stat {
       padding-right: 2.5px;
       width: 80%
     }
 
-    .champ-row{
+    .champ-row {
 		  border-width: 1px;
 	    border-style: solid;
       border-color: black;
     }
 
 		
-   	.stat{
+   	.stat {
 		  font-size: 1.2em;
 		  color:black;
 		  line-height:1.5;
 		  text-align: left;
-		  
-	  }
+		}
   }
 }
 

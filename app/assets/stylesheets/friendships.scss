@@ -1,39 +1,37 @@
-.summoner-request-page, .summoner-friends{
+.summoner-request-page, .summoner-friends {
 	position: fixed;
 	width: 100%;
 	min-height: 1080px;
-	/*height: 100%;*/
 	background-image: image-url("login_bg.png");
 	background-repeat: no-repeat;
 	background-size: cover;
 	padding-top: 20px;
-	.request-table, .friends-list-table{
+	.request-table, .friends-list-table {
     border-collapse: collapse;
     margin-top:60px;
 	  border: 1px solid black;
-	  cellpadding: 0;
 	  background: linear-gradient(#c8bbb6, #f4f2f1);
-	  .request-header, .friends-list-header{
+	  .request-header, .friends-list-header {
 	    text-align: center;
 	    font-size: 1.7em;
 	  }
-	  .header{
+	  .header {
 	    text-align: center;
 	    font-size: 1.2em;
 	  }
 	}
-	.request-table td, .request-table th, .friends-list-table td, .friends-list-table th{
+	.request-table td, .request-table th, .friends-list-table td, .friends-list-table th {
 	  width: auto;
 	  padding: 5px;
 		border: 0px;
-		.btn{
+		.btn {
       width: 100%;
     }
-    .btn-default{
+    .btn-default {
 	    color: white;
 	    background: black;
 	  }
-	  .champ-img{
+	  .champ-img {
       width: 10%;
       vertical-align: middle;
     }
