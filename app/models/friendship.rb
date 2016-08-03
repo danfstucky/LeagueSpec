@@ -6,7 +6,7 @@ class Friendship < ActiveRecord::Base
 	cattr_accessor :daily_request_limit
   @@daily_request_limit = 12
   belongs_to :user, foreign_key: 'user_id', class_name: 'User'
-  belongs_to :friend, foreign_key: 'user_id', class_name: 'User' 
+  belongs_to :friend, foreign_key: 'friend_id', class_name: 'User' 
   validates_presence_of   :user
   validates_presence_of   :friend
   validates_uniqueness_of :friend_id, scope: :user_id
