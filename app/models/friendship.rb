@@ -5,11 +5,11 @@ class Friendship < ActiveRecord::Base
   attr_accessor :friendship_request_token
 	cattr_accessor :daily_request_limit
   @@daily_request_limit = 12
-  belongs_to :user, :foreign_key => "user_id", :class_name => "User"
-	belongs_to :friend, :foreign_key => "friend_id", :class_name => "User" 
+  belongs_to :user, foreign_key: 'user_id', class_name: 'User'
+  belongs_to :friend, foreign_key: 'user_id', class_name: 'User' 
   validates_presence_of   :user
   validates_presence_of   :friend
-  validates_uniqueness_of :friend_id, :scope => :user_id
+  validates_uniqueness_of :friend_id, scope: :user_id
   validate :cannot_request_if_daily_limit_reached
   validates_each :user_id do |record, attr, value|
     record.errors.add attr, 'can not be same as friend' if record.user_id.eql?(record.friend_id)
