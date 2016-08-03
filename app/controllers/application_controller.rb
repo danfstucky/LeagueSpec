@@ -4,12 +4,4 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   include SessionsHelper
 
-#Including some general functions here so they can be reached by several controllers
-	def require_user
-	  if !logged_in?
-	    flash[:danger] = "You must be logged in to perform that action"
-	    redirect_to root_path
-	  end
-	end
-
 end
