@@ -3,6 +3,7 @@ class FriendshipsController < ApplicationController
   before_action :search_summoner_for_request_action, only: [:edit]
   before_action :require_user
   before_action :require_same_user, only: [:edit, :decide]
+  $friends_list_length = 5
   def new
     @user ||= current_user
     friend = User.find_by_name(params[:summoner_to_add].downcase)
@@ -32,12 +33,13 @@ class FriendshipsController < ApplicationController
     @friends_list_code = params[:friends_list_code]
     user ||= current_user
     if @friends_list_code == 'all'
-      @friendships = user.friendships.accepted.paginate(page: params[:page], per_page: 5)
+      @friendships = user.friendships.accepted
     elsif @friends_list_code == 'active'
-      @friendships = user.get_online_friends.paginate(page: params[:page], per_page: 5)
+      @friendships = user.get_online_friends
     else 
-      @friendships = user.friendships.pending.paginate(page: params[:page], per_page: 5)
-    end      
+      @friendships = user.friendships.pending
+    end   
+    @friendships = @friendships.paginate(page: params[:page], per_page: LeagueSpec::FRIENDS_LIST_PAGINATION_CONSTANT)   
   end
 
   def decide
