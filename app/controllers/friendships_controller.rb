@@ -6,7 +6,7 @@ class FriendshipsController < ApplicationController
   $friends_list_length = 5
   def new
     @user ||= current_user
-    friend = User.find_by_name(params[:summoner_to_add].downcase)
+    friend = User.find_by_name(params[:summoner_to_add].to_s.downcase)
     friendship = Friendship.new(:user_id => @user.id, :friend_id => friend.id, :initiator => true)
     reverse_friendship = Friendship.new(:user_id => friend.id, :friend_id =>  @user.id)
     if (friendship.save && reverse_friendship.save)

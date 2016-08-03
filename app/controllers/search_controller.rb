@@ -3,7 +3,7 @@ class SearchController < ApplicationController
   before_action :search_summoner, only: [:search]
   
   def search
-    @name = params[:summoner].downcase
+    @name = params[:summoner].to_s.downcase
     if @name.to_s.length<=1
       flash[:danger] = 'Invalid summoner name length. Verify valid summoner name and try again'
       return

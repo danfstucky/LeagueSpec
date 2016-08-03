@@ -77,12 +77,12 @@ class User < ActiveRecord::Base
 
 	#Converts email to all lower-case
 	def downcase_email
-		self.email = email.downcase
+		self.email = email.to_s.downcase
 	end
 
 	#Converts email to all lower-case
 	def downcase_name
-		self.name = name.downcase
+		self.name = name.to_s.downcase
 	end
 
 	# Creates and assigns the activation token and digest
