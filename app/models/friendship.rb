@@ -54,13 +54,11 @@ class Friendship < ActiveRecord::Base
   end
 
   def accept_friend_request
-    update_attribute(:friendship_status, 2)
-    update_attribute(:request_responded_at, Time.zone.now)
+    update(friendship_status: 2, request_responded_at: Time.zone.now)
   end
 
   def deny_friend_request
-    update_attribute(:friendship_status, 0)
-    update_attribute(:request_responded_at, Time.zone.now)
+    update(friendship_status: 0, request_responded_at: Time.zone.now)
   end
 
 
