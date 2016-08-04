@@ -1,6 +1,6 @@
-<div class = "search-page" id="summoner-lookup">
+<div class="search-page" id="summoner-lookup">
   
-  <div class = "col-md-5 col-md-offset-3">
+  <div class="col-md-5 col-md-offset-3">
   	<div class="table-responsive">
 		  <table class="table search-table" cellspacing="0" style="border-spacing: 0;">
 		    <thead>
@@ -8,7 +8,7 @@
 		    		<th colspan="3" scope="colgroup" class="header search-header">Summoner Search Result</th>
 		    	</tr>
 		    </thead>
-		    <tbody class = "search-row">
+		    <tbody class="search-row">
 		      <% if @summoner %>
 		        <tr>
 		        	<td ><strong>Summoner Name: <%= @name.capitalize %></strong></td>
@@ -64,7 +64,7 @@
                   <% if @registeredUser != current_user %>
 	                  <% if @registeredUser.activated %>
 		                  <% if @current_user.friendships.exists?(friend_id: @registeredUser.id)%>
-		                    <td class = "badge" ><%= "#{@current_user.friendships.find_by_friend_id(@registeredUser.id).friendship_status.capitalize} Request" %></td>
+		                    <td class="badge" ><%= "#{@current_user.friendships.find_by_friend_id(@registeredUser.id).friendship_status.capitalize} Request" %></td>
 		                  <% else %>
 		                    <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), class: "btn btn-success" %></td>
 		                  <% end %>
@@ -73,7 +73,7 @@
 	                    <td ><%= link_to "Invite Friend", root_path, class: "btn btn-primary" %></td>
 	                  <% end %>
 	                <% else %>
-	                  <td class = "badge" ><%= "#{@current_user.name.capitalize} is currently logged in." %></td>
+	                  <td class="badge" ><%= "#{@current_user.name.capitalize} is currently logged in." %></td>
 	                <% end %>
 	              <% else %>
                   <td ><%= link_to "Invite Friend", root_path, class: "btn btn-primary" %></td>
