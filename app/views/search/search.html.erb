@@ -13,7 +13,7 @@
 		        <tr>
 		        	<td ><strong>Summoner Name: <%= @name.capitalize %></strong></td>
               <% if @statsObj %>
-		        	  <td ><strong>Most Played Champ: <%= "#{@mpChamp[:name]}"%> </strong><%= " - (#{@mostPlayedChampObj.stats.total_sessions_played}x)"%></td>
+		        	  <td ><strong>Most Played Champ: <%= @mpChamp[:name]%> </strong><%= " - (#{@mostPlayedChampObj.stats.total_sessions_played}x)"%></td>
 		        	  <td class="champ-img" rowspan="3" scope="rowgroup"><%= link_to image_tag("icons/#{@mpChamp[:name].delete(' ')}Square.png"), champion_path(@mpChamp.id)  %></td>
 		        	<% else %>
                 <td colspan="2" scope="colgroup" ><strong>No stats found for summoner.</strong></td>
@@ -22,13 +22,13 @@
 		        <tr>
 		        	<td ><strong>Summoner Level: <%= @summoner.summoner_level %></strong></td>
 		        	<% if @statsObj %>
-			        	<td ><strong>Highest KDR Champ: <%= "#{@hkdrChamp[:name]}"%> </strong> 
-				    		                                    <% if @highestKillDeathRatioChampObj[0].stats.total_deaths_per_session >  0 %>
-		                                                  <%= " - (#{((@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session.to_f)/(@highestKillDeathRatioChampObj[0].stats.total_deaths_per_session)).round(2)})"%>
-		                                                <%else%>
-		                                                  <%= " - (#{(@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session.to_f.round(2))})"%>
-		                                                <%end%>
-			        	</td>
+			        	<td ><strong>Highest KDR Champ: <%= @hkdrChamp[:name]%> </strong> 
+			    		                                    <% if @highestKillDeathRatioChampObj[0].stats.total_deaths_per_session >  0 %>
+	                                                  <%= " - (#{((@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session.to_f)/(@highestKillDeathRatioChampObj[0].stats.total_deaths_per_session)).round(2)})"%>
+	                                                <%else%>
+	                                                  <%= " - (#{(@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session.to_f.round(2))})"%>
+	                                                <%end%>
+		            </td>
 			        <% else %>
 			          <td colspan="2" scope="colgroup" rowspan="2" scope="rowgroup"><strong>Either summoner is inactive or there are no stats to display.</strong></td>
 			        <% end %>
@@ -36,7 +36,7 @@
 		        <tr>
 		          <td ><strong>Last Active: <%= @summoner.revision_date.to_s.slice(0,10) %></strong></td>
 		          <% if @statsObj %>
-		            <td ><strong>Highest WLR Champ: <%= "#{@hwlrChamp[:name]}"%> </strong> 
+		            <td ><strong>Highest WLR Champ: <%= @hwlrChamp[:name]%> </strong> 
 			    		                                    <% if @highestWinLossRatioChampObj[0].stats.total_deaths_per_session >  0 %>
 	                                                  <%= " - (#{((@highestWinLossRatioChampObj[0].stats.most_champion_kills_per_session.to_f)/(@highestWinLossRatioChampObj[0].stats.total_deaths_per_session)).round(2)})"%>
 	                                                <%else%>
