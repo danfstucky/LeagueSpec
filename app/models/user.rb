@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :friendships_initiated_by_me, -> { where('initiator = ?', true) }, class_name: 'Friendship', foreign_key: 'user_id', dependent: :destroy
   has_many :friendships_not_initiated_by_me, -> { where('initiator = ?', false) }, class_name: 'Friendship', foreign_key: 'user_id', dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
-	before_save :downcase_email, :downcase_name
+	before_save :downcase_email_and_name
 	before_create :create_activation_digest
 
 	validates :name,	presence: true, length: { maximum: 30 }
@@ -75,13 +75,9 @@ class User < ActiveRecord::Base
 
 	private
 
-	#Converts email to all lower-case
-	def downcase_email
+	#Converts name and email to all lower-case
+	def downcase_email_and_name
 		self.email = email.to_s.downcase
-	end
-
-	#Converts email to all lower-case
-	def downcase_name
 		self.name = name.to_s.downcase
 	end
 
