@@ -66,34 +66,34 @@
 		                  <% if @current_user.friendships.exists?(friend_id: @registeredUser.id)%>
 		                    <td class = "badge" ><%= "#{@current_user.friendships.find_by_friend_id(@registeredUser.id).friendship_status.capitalize} Request" %></td>
 		                  <% else %>
-		                    <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), :class =>"btn btn-success" %></td>
+		                    <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), class: "btn btn-success" %></td>
 		                  <% end %>
-		                  <td ><%= link_to "View Profile", profile_path(@registeredUser.id), :class =>"btn btn-primary" %></td>
+		                  <td ><%= link_to "View Profile", profile_path(@registeredUser.id), class: "btn btn-primary" %></td>
 	                  <% else %>
-	                    <td ><%= link_to "Invite Friend", root_path, :class =>"btn btn-primary" %></td>
+	                    <td ><%= link_to "Invite Friend", root_path, class: "btn btn-primary" %></td>
 	                  <% end %>
 	                <% else %>
 	                  <td class = "badge" ><%= "#{@current_user.name.capitalize} is currently logged in." %></td>
 	                <% end %>
 	              <% else %>
-                  <td ><%= link_to "Invite Friend", root_path, :class =>"btn btn-primary" %></td>
+                  <td ><%= link_to "Invite Friend", root_path, class: "btn btn-primary" %></td>
                 <% end %>
-                <td colspan="2" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
+                <td colspan="2" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), class: "btn btn-danger" %></td>
 			      	<% else %>
-			      	  <td colspan="3" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), :class =>"btn btn-danger" %></td>
+			      	  <td colspan="3" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), class: "btn btn-danger" %></td>
 			      	<% end %>
 			      <% else %>
 			        <% if @statsObj %>
                 <% if @registeredUser %>
-                  <td ><%= link_to "Login to Add Summoner", login_path, :class =>"btn btn-success" %></td>
-                  <td ><%= link_to "Sign Up to Add Summoner", new_profile_path, :class =>"btn btn-primary" %></td>
+                  <td ><%= link_to "Login to Add Summoner", login_path, class: "btn btn-success" %></td>
+                  <td ><%= link_to "Sign Up to Add Summoner", new_profile_path, class: "btn btn-primary" %></td>
                 <% else %>
-                  <td  ><%= link_to "Login to Invite Summoner", login_path, :class =>"btn btn-success" %></td>
-                  <td  ><%= link_to "Sign Up and Invite Summoner", new_profile_path, :class =>"btn btn-primary" %></td>
+                  <td  ><%= link_to "Login to Invite Summoner", login_path, class: "btn btn-success" %></td>
+                  <td  ><%= link_to "Sign Up and Invite Summoner", new_profile_path, class: "btn btn-primary" %></td>
                 <% end %>
-                <td ><%= link_to "Dismiss Search", root_path, :class =>"btn btn-danger" %></td>
+                <td ><%= link_to "Dismiss Search", root_path, class: "btn btn-danger" %></td>
               <% else %>
-                <td  colspan="3" scope="colgroup"><%= link_to "Dismiss Search", root_path, :class =>"btn btn-danger" %></td>
+                <td  colspan="3" scope="colgroup"><%= link_to "Dismiss Search", root_path, class: "btn btn-danger" %></td>
               <% end %>
 			      <% end %>
 		      </tr>
