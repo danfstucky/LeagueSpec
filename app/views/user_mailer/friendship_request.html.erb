@@ -1,0 +1,8 @@
+<h1>League Spec</h1>
+<p>Hi <%= @friend.name.capitalize %>,</p>
+<p><%= @user.name.capitalize %> would like to add you as a Summoner Friend on LeagueSpec. Having summoner friends on LeagueSpec allows you to 
+    keep track of their activity and have a better LoL experience. Click on the link below to view this request:</p>
+
+<%= link_to "View Request", edit_friendship_url(@friendship.friendship_request_token, friend_email: @friend.email, requester_email: @user.email) %>
+
+<p>This is an unattended email address. Do not reply</p>

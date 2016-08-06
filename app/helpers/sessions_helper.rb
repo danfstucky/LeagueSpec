@@ -3,6 +3,9 @@ module SessionsHelper
 	# Logs in the given user.
 	def log_in(user)
 		session[:user_id] = user.id
+		user.update_attribute(:logged_in, true)
+		user.update_attribute(:last_logged_in, Time.zone.now)
+
 	end
 
 	# Remembers a user in a persistent session.
@@ -39,8 +42,17 @@ module SessionsHelper
 	
 	# Logs out the current user
 	def log_out
-		forget(current_user)
+    @current_user.update_attribute(:logged_in, false)
+    forget(current_user)
 		session.delete(:user_id)
 		@current_user = nil
+	end
+
+  #Ensures user is logged in to perform certain actions.
+	def require_user
+  if !logged_in?
+    flash[:danger] = "You must be logged in to perform that action"
+    redirect_to root_path
+  end
 	end
 end

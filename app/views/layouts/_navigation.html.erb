@@ -18,20 +18,18 @@
               <li><%= link_to "Log out", logout_path, method: "delete" %></li>
             </ul>
           </li>
-        <% else %>
-          <li><%= link_to "Log in", login_path %></li>
-        <% end %>
-
-        <!-- Social Menu options -->
+          <!-- Social Menu options -->
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">LeagueSpec Social <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Add Friend</a></li>
-            <li><a href="#">View All Friends</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Active Friends</a></li>
-            </ul>
+            <li><%= link_to "All Friends", friendships_url(friends_list_code: 'all') %></li>
+            <li><%= link_to "Active Friends", friendships_url(friends_list_code: 'active') %></li>
+            <li><%= link_to "Pending Requests", friendships_url(friends_list_code: 'pending') %></li>
+          </ul>
         </li>
+        <% else %>
+          <li><%= link_to "Log in", login_path %></li>
+        <% end %>
       </ul>
     <div class="col-md-3 search-form pull-right">  
       <%= form_tag search_summoner_path, class: "navbar-form", method: :get, id: 'summoner-lookup-form' do %>
