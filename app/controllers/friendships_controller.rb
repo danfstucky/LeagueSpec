@@ -2,10 +2,10 @@ class FriendshipsController < ApplicationController
   include LolConnections
   before_action :search_summoner_for_request_action, only: [:edit]
   before_action :require_user
+  before_action :set_user
   before_action :require_same_user, only: [:edit, :decide]
   FRIENDS_LIST_LENGTH = 5.freeze
   def new
-    @user ||= current_user
     friend = User.find_by_name(params[:summoner_to_add].to_s.downcase)
     friendship = Friendship.new(:user_id => @user.id, :friend_id => friend.id, :initiator => true)
     reverse_friendship = Friendship.new(:user_id => friend.id, :friend_id =>  @user.id)
@@ -24,20 +24,18 @@ class FriendshipsController < ApplicationController
     friendship ||= get_friendship(@requester.id)
     if friendship.request_responded_at != nil
       flash[:danger] = "You have either accepted or denied that request. If you'd like to add summoner, send a new LeagueSpec request"
-      @user ||= current_user
       redirect_to profile_path(@user.id)
     end
   end
 
   def index
     @friends_list_code = params[:friends_list_code]
-    user ||= current_user
     if @friends_list_code == 'all'
-      @friendships = user.friendships.accepted
+      @friendships = @user.friendships.accepted
     elsif @friends_list_code == 'active'
-      @friendships = user.get_online_friends
+      @friendships = @user.get_online_friends
     else 
-      @friendships = user.friendships.pending
+      @friendships = @user.friendships.pending
     end   
     @friendships = @friendships.paginate(page: params[:page], per_page: FRIENDS_LIST_LENGTH)   
   end
@@ -45,8 +43,7 @@ class FriendshipsController < ApplicationController
   def decide
     requester ||= get_requester
     friendship ||= get_friendship(requester.id)
-    user ||= current_user
-    if !Friendship.friends?(user, requester) 
+    if !Friendship.friends?(@user, requester) 
       if params[:request_token] == 'from-friends-list' || friendship.reverse.authenticated?(:friendship_request, params[:request_token])
         if params[:response_code] == 'accept' 
           friendship.accept_friend_request
@@ -89,8 +86,8 @@ class FriendshipsController < ApplicationController
 
   private
   def require_same_user
-    user ||= User.find_by(email: params[:friend_email])
-    if current_user != user
+    @user ||= User.find_by(email: params[:friend_email])
+    if current_user != @user
       flash[:danger] = "Only summoner requests sent to your email can be accessed. Login to LeagueSpec with the right email and click request link again."
       redirect_to :back
     end
@@ -100,7 +97,9 @@ class FriendshipsController < ApplicationController
     User.find_by(email: params[:requester_email])
   end
   def get_friendship(requester_id)
-    user ||= current_user
-    user.friendships_not_initiated_by_me.find_by(friend_id: requester_id)
+    @user.friendships_not_initiated_by_me.find_by(friend_id: requester_id)
+  end
+  def set_user
+    @user ||= current_user
   end
 end
