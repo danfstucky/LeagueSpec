@@ -16,7 +16,6 @@ module LolConnections
   end
 
    def create_search_connection
-    # This can be private
     create_summoner_connection
     create_champ_connection
   end
@@ -24,7 +23,6 @@ module LolConnections
   def get_summoner_ranked_stats(search_id)
     create_stats_connection
     @statsObj = statsReq.ranked(search_id, extra = {})
-    puts "Player Summary: #{@statsReq.ranked(@summonerObj.id)}"
     #Since the champion with id = 0 always returns 404 error and is used for error checking, it is being deleted from array.
     if @statsObj
       @statsObj.champions.delete_if{ |h| h.id == 0 }

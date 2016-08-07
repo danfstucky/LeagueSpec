@@ -1,23 +1,23 @@
 class FeaturedStatsService < LolClient
 
-	def initialize(user)
-		super()
-		@player = client.summoner.by_name(user.name).first
-		@player_champs_list = client.stats.ranked(@player.id).champions
-		if @player_champs_list
+  def initialize(user)
+    super()
+    @player = client.summoner.by_name(user.name).first
+    @player_champs_list = client.stats.ranked(@player.id).champions
+    if @player_champs_list
       @player_champs_list.delete_if{ |h| h.id == 0 }
     end
-	end
+  end
 
   # Returns a hash of player's champion statistics
-	def featured_stats
-		player_data =  {}
-		player_data[:summoner] 		= @player
-		player_data[:top_played]  = process_champion_list(top_played_champs)
-		player_data[:top_kd] 			= process_champion_list(top_kd_champs)
-		player_data[:top_wl] 			= process_champion_list(top_wl_champs)
+  def featured_stats
+    player_data =  {}
+    player_data[:summoner] 		= @player
+    player_data[:top_played]  = process_champion_list(top_played_champs)
+    player_data[:top_kd] 			= process_champion_list(top_kd_champs)
+    player_data[:top_wl] 			= process_champion_list(top_wl_champs)
     player_data
-	end
+  end
 
   # Returns a hash of player's overall statistics
   def overall_stats
@@ -38,7 +38,7 @@ class FeaturedStatsService < LolClient
 
   # Retrieve champions sorted by top K/D for logged in player
   def top_kd_champs
-  	@player_champs_list.sort_by do |champ|
+    @player_champs_list.sort_by do |champ|
       if champ.stats.total_deaths_per_session >  0
         -(champ.stats.most_champion_kills_per_session.to_f / champ.stats.total_deaths_per_session)
       else 
