@@ -12,10 +12,10 @@ class FeaturedStatsService < LolClient
   # Returns a hash of player's champion statistics
   def featured_stats
     player_data =  {}
-    player_data[:summoner] 		= @player
+    player_data[:summoner]    = @player
     player_data[:top_played]  = process_champion_list(top_played_champs)
-    player_data[:top_kd] 			= process_champion_list(top_kd_champs)
-    player_data[:top_wl] 			= process_champion_list(top_wl_champs)
+    player_data[:top_kd]      = process_champion_list(top_kd_champs)
+    player_data[:top_wl]      = process_champion_list(top_wl_champs)
     player_data
   end
 
