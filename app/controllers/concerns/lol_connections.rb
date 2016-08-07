@@ -69,34 +69,6 @@ module LolConnections
     }
     @highestWinLossRatioChampObj = @highestWinLossRatioChampObj.paginate(:page => params[:page], :per_page => 5)
   end
-  def get_overall_WLR
-    overallLosses = 0
-    overallWins = 0                                              
-    @statsObj.champions.each do |x|
-      overallLosses += x.stats.total_sessions_lost
-      overallWins += x.stats.total_sessions_won 
-    end
-    if overallLosses > 0 then                       
-      @overallWinLossRatio = (overallWins.to_f/overallLosses).round(2)
-    else
-      @overallWinLossRatio = overallWins.to_f
-    end
-  end
-
-  def get_overall_KDR
-    overallKills = 0
-    overallDeaths = 0                                              
-    @statsObj.champions.each do |x|
-      overallKills+= x.stats.most_champion_kills_per_session
-      overallDeaths+= x.stats.total_deaths_per_session 
-    end
-    if overallDeaths > 0 then                       
-      @overallKillDeathRatio = (overallKills.to_f/overallDeaths).round(2)
-    else
-      @overallKillDeathRatio = overallKills.to_f
-    end
-    
-  end
   
   def verify_summoner_name_and_stats
     #So far, only three requests are being used. Stats Request, Static Request and Summoner Request.
@@ -123,22 +95,6 @@ module LolConnections
         redirect_to new_profile_path
       end
     end
-  end
-
-  def get_summoner
-    create_summoner_connection
-    puts "Inside get_summoner"
-    @summonerObj = @summonerReq.by_name(User.find(params[:id]).name).first
-
-    get_summoner_ranked_stats(@summonerObj.id)
-    create_champ_connection
-    get_most_played_champ
-    get_overall_WLR
-    get_overall_KDR
-    get_highest_KDR_champ
-    get_highest_WLR_champ
-    #service = FeaturedStatsService.new(current_user)
-    #service.featured_stats
   end
   
   def search_summoner
