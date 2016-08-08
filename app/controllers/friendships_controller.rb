@@ -2,7 +2,7 @@ class FriendshipsController < ApplicationController
   include LolConnections
   before_action :search_summoner_for_request_action, only: [:edit]
   before_action :require_user
-  before_action :set_user
+  before_action :check_or_set_user, except: [:destroy]
   before_action :require_same_user, only: [:edit, :decide]
   FRIENDS_LIST_LENGTH = 5.freeze
   def new
@@ -86,8 +86,8 @@ class FriendshipsController < ApplicationController
 
   private
   def require_same_user
-    @user ||= User.find_by(email: params[:friend_email])
-    if current_user != @user
+    user_deciding_friendship =  User.find_by(email: params[:friend_email])
+    if @user != user_deciding_friendship
       flash[:danger] = "Only summoner requests sent to your email can be accessed. Login to LeagueSpec with the right email and click request link again."
       redirect_to :back
     end
@@ -98,8 +98,5 @@ class FriendshipsController < ApplicationController
   end
   def get_friendship(requester_id)
     @user.friendships_not_initiated_by_me.find_by(friend_id: requester_id)
-  end
-  def set_user
-    @user ||= current_user
   end
 end

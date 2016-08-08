@@ -15,10 +15,13 @@ Rails.application.routes.draw do
   post    'login'         =>  'sessions#create'
   delete  'logout'        =>  'sessions#destroy'
   resources :profiles
+  get 'invite_user', to: 'profiles#invite'
+  get 'send_invitation', to: 'profiles#send_invitation'
   resources :champions, only: [:show]
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :create, :edit, :update]
   get 'search_summoner', to: 'search#search'
+  get 'search_to_invite', to: 'search#search_to_invite'
   resources :friendships, only: [:new, :edit, :index, :destroy]
   get 'decide_friendships', to: 'friendships#decide'
 end

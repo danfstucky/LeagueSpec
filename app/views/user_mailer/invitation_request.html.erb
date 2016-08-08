@@ -1,0 +1,8 @@
+<h1>League Spec</h1>
+<p>Hi <%= @name.capitalize %>,</p>
+<p><%= @registered_summoner.name.capitalize %> has sent you an exclusive invitation to join LeagueSpec. LeagueSpec is an elite LoL social media space that enriches your LoL experience and helps you stay in touch with other LoL players. 
+Click on the link below to activate this request:</p>
+
+<%= link_to "Join LeagueSpec", new_profile_url %>
+
+<p>This is an unattended email address. Do not reply</p>
