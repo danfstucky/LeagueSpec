@@ -2,14 +2,16 @@
 class ProfilesController < ApplicationController
   include LolConnections
   before_action :verify_summoner_name_and_stats, only: [:create]
-  before_action :get_summoner, only: [:show]
 
 	def index
 
   end
 
   def show
-    @user = User.find(params[:id])
+    @user ||= current_user
+    featured_stats_service = FeaturedStatsService.new(@user)
+    @featured_stats = featured_stats_service.featured_stats
+    @overall_stats = featured_stats_service.overall_stats
   end
 
   def new
@@ -24,9 +26,9 @@ class ProfilesController < ApplicationController
       redirect_to root_url
     else 
       render 'new'
-      
     end
   end
+
   private
 
   def user_params
