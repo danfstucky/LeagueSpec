@@ -31,12 +31,14 @@ module LolConnections
   
   def get_search_stats
     get_most_played_champ
+    puts "here"
     @mostPlayedChampObj = @mostPlayedChampObj[0]
     @mpChamp = @champsReq.get('champion', @mostPlayedChampObj.id)
     get_highest_KDR_champ
     @hkdrChamp = @champsReq.get('champion', @highestKillDeathRatioChampObj[0].id)
     get_highest_WLR_champ
     @hwlrChamp = @champsReq.get('champion', @highestWinLossRatioChampObj[0].id)
+    @registeredUser = User.find_summoner_by_name(@name)
   end
   
   def get_most_played_champ
@@ -98,8 +100,23 @@ module LolConnections
   def search_summoner
     create_search_connection
     begin
-        @summoner = @summonerReq.by_name(params[:summoner].downcase).first
-        get_summoner_ranked_stats(@summoner.id)
+      @summoner = @summonerReq.by_name(params[:summoner].downcase).first
+      get_summoner_ranked_stats(@summoner.id)
+    rescue Lol::NotFound => e
+      if e.message == '404 Not Found'
+        return
+      end
+    end
+    get_search_stats
+  end
+
+#Look up information about the person sending the summoner request
+  def search_summoner_for_request_action
+    create_search_connection
+    begin
+      @requester = User.find_by(email: params[:requester_email])
+      @summoner = @summonerReq.by_name(@requester.name).first
+      get_summoner_ranked_stats(@summoner.id)
     rescue Lol::NotFound => e
       if e.message == '404 Not Found'
         return

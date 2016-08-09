@@ -13,5 +13,8 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery_ujs
+//This turbolinks gem causes submissions to be made twice. If anyone runs into an error where their submit button tries to
+//perform an action twice even though you clicked it once, you may remove turbolinks (I have not used it anyway) or you may
+// add the data-no-turbolink tag to your html object.
 //= require turbolinks
 //= require_tree .
