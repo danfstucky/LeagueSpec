@@ -31,7 +31,6 @@ module LolConnections
   
   def get_search_stats
     get_most_played_champ
-    puts "here"
     @mostPlayedChampObj = @mostPlayedChampObj[0]
     @mpChamp = @champsReq.get('champion', @mostPlayedChampObj.id)
     get_highest_KDR_champ
