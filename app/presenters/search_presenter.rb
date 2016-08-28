@@ -1,4 +1,5 @@
-class ChampionPresenter < SimpleDelegator
+class SearchPresenter < SimpleDelegator
+  NO_STATS = "No Stats.".freeze
 
   def initialize(client, champion)
     @champion = champion
@@ -6,9 +7,23 @@ class ChampionPresenter < SimpleDelegator
     super(@champion_info)
   end
 
-  def total_games
-    champion.stats.total_sessions_played
+  def most_played
+    champion ? "#{name} - (#{champion.stats.total_sessions_played})" : NO_STATS
   end
+
+  def best_kd
+    champion ? "#{name} - (#{kd_ratio})" : NO_STATS
+  end
+
+  def best_wl
+    champion ? "#{name} - (#{wl_ratio})" : NO_STATS
+  end
+
+  def icon
+    "icons/#{name.delete(' ')}Square.png" unless champion.nil?
+  end
+
+  private 
 
   def total_wins
     @total_wins ||= champion.stats.total_sessions_won
@@ -41,12 +56,6 @@ class ChampionPresenter < SimpleDelegator
       total_wins.to_f.round(2)
     end
   end
-
-  def icon
-    "icons/#{name.delete(' ')}Square.png"
-  end
-
-  private
 
   attr_reader :champion, :champion_info
 end
