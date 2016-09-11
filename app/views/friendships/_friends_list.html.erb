@@ -12,8 +12,20 @@
 		<% else %>
 		  <td ><strong>Friends Since: <%= time_ago_in_words(friendship.request_responded_at).capitalize %> ago</strong></td>
 		<% end %>
-	  <td class="champ-img" rowspan="3" scope="rowgroup"><span class="imgWrap"><%= link_to image_tag("icons/AhriSquare.png"), profile_path(friendship.friend.id)  %></span>
-    </td>
+	  <td rowspan="3" scope="rowgroup">
+      <div class="champ-img">
+        <span class="imgWrap"><%= link_to image_tag("icons/AhriSquare.png"), profile_path(friendship.friend.id)  %></span>
+        <div class="status-icon">
+	        <% if friendship.friend.logged_in == true %>
+	           <%= image_tag("online_icon.png") %>
+	        <% elsif friendship.friend.last_logged_in >= (Date.today - 1) %>
+	          <%= image_tag("recently_active_icon.png") %>
+	        <% else %>
+	          <%= image_tag("offline_icon.png") %>
+	        <% end %>
+        </div>
+      </div>
+	  </td>
 	</tr>
 	<tr>
 		<td ><strong>Friendship Status: <%= friendship.friendship_status.capitalize %></strong></td>
