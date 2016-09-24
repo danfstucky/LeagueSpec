@@ -4,7 +4,7 @@ class SearchService < LolClient
     super()
     begin
       @player = client.summoner.by_name(user_name.downcase).first
-      @registered_user = User.find_summoner_by_name(user_name)
+      @registered_user = User.find_summoner_by_name(user_name.downcase)
       @player_champs_list = client.stats.ranked(@player.id).champions
       if @player_champs_list
         @player_champs_list.delete_if{ |h| h.id == 0 }

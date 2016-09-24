@@ -92,11 +92,18 @@ class User < ActiveRecord::Base
 
   # Verifies that the summoner name corresponds to a registered LoL profile.
   def verify_summoner_name
-    client = Lol::Client.new(Rails.application.secrets.sulai_api_key, {region: "na"})
+    client = LolClient.new.client
     begin 
-      client.summoner.by_name(name).first
+      summoner = client.summoner.by_name(name).first
     rescue
       errors.add(:name, "has to be a registered LoL Summoner Name. Register at LoL's official website and then try again.")
+      return
+    end
+
+    begin
+      client.stats.ranked(summoner.id)
+    rescue
+      errors.add(:name, "Summoner stats were not found. Verify that summoner has been active in the last calendar year and try signing up again.")
     end
   end
 end

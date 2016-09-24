@@ -2,6 +2,7 @@ require 'lol'
 require 'certified'
 
 class LolClient
+  attr_reader :client
 
   def initialize
     @client = Lol::Client.new(Rails.application.secrets.sulai_api_key, {region: "na"})
@@ -40,6 +41,4 @@ class LolClient
       end
     end
   end
-  
-  attr_reader :client
 end
