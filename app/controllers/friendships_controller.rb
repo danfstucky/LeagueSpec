@@ -96,7 +96,6 @@ class FriendshipsController < ApplicationController
   end
 
   def get_requester
-    binding.pry
     User.find_by(email: params[:requester_email])
   end
 
