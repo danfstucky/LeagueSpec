@@ -34,9 +34,9 @@ class ProfilesController < ApplicationController
     @emailErrors = []
     @emailErrors << "Summoner email must match its confirmation." if (params[:summoner_email]==nil)
     if @emailErrors.empty?
-      @email = params[:summoner_email].to_s.downcase
+      email = params[:summoner_email].to_s.downcase
       @name = params[:summoner].to_s.downcase
-      send_invitation_request_email
+      UserMailer.invitation_request(@user, email, @name).deliver_now
       flash[:info] = "Invitation to join LeagueSpec was successfully sent to #{@name.capitalize}."
       redirect_to profile_path(@user.id)
     else 
@@ -50,9 +50,4 @@ class ProfilesController < ApplicationController
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
-
-  def send_invitation_request_email
-    UserMailer.invitation_request(@user, @email, @name).deliver_now
-  end
-
 end

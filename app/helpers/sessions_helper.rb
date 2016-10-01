@@ -29,7 +29,7 @@ module SessionsHelper
 	end
 
 	def check_or_set_user
-		@user ||= current_user
+	  @user ||= current_user
 	end
 
 	# Returns true if the user is logged in, false otherwise.
