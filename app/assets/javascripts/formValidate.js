@@ -1,10 +1,8 @@
 function validateSummonerField() {
-  //var id = 'summoner_name'
   $(".email").hide();
   return fieldValidation('#summoner_name');
 };
 function validateEmailField() {
-  //var id = '#summoner_email'
   return fieldValidation('#summoner_email');
 };
 function fieldValidation(id) {

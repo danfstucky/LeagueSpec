@@ -86,8 +86,7 @@ class FriendshipsController < ApplicationController
 
   private
   def require_same_user
-    user_deciding_friendship =  User.find_by(email: params[:friend_email])
-    if @user != user_deciding_friendship
+    if @user != User.find_by(email: params[:friend_email])
       flash[:danger] = "Only summoner requests sent to your email can be accessed. Login to LeagueSpec with the right email and click request link again."
       redirect_to :back
     end
