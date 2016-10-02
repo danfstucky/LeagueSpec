@@ -30,4 +30,10 @@ class UserMailer < ApplicationMailer
     mail from: "friendship-request@leaguespec.com"
   end
 
+  def invitation_request(user, email, name)
+    @name = name
+    @registered_summoner = user
+    mail to: email, subject: "Invitation to Join LeagueSpec: A LoL Enthusiast Community!"
+    mail from: "new-user-invitation@leaguespec.com"
+  end
 end

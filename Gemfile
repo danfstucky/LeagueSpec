@@ -34,6 +34,8 @@ gem 'certified'
 
 gem 'will_paginate'
 
+gem 'gon'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

@@ -7,8 +7,26 @@ class SearchController < ApplicationController
       @search_stats = search_service.search_stats
     else 
       redirect_to :back
+    end   
+  end
+
+  def search_to_invite
+    if params[:summoner_name]
+      @registeredUser = User.find_summoner_by_name(params[:summoner_name].to_s.downcase)
+      gon.registeredUser = @registeredUser
+      if @registeredUser
+        render partial: 'search_to_invite' and return
+      else
+        downcase_and_search_summoner(params[:summoner_name])
+        gon.summoner = @summoner
+      end
     end
-    
+    if @summoner
+      render partial: 'search_to_invite'
+    else
+      @search_error = true
+      render status: :not_found, nothing: true
+    end
   end
 
   private
@@ -24,5 +42,6 @@ class SearchController < ApplicationController
       true
     end
   end
-
+  
 end
+
