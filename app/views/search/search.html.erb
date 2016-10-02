@@ -72,13 +72,13 @@
 		                  <% end %>
 		                  <td ><%= link_to "View Profile", profile_path(@registeredUser.id), class: "btn btn-primary" %></td>
 	                  <% else %>
-	                    <td ><%= link_to "Invite Friend", root_path, class: "btn btn-primary" %></td>
+	                    <td ><%= link_to "Invite Friend", invite_user_path, class: "btn btn-primary" %></td>
 	                  <% end %>
 	                <% else %>
 	                  <td class="badge" ><%= "#{@current_user.name.capitalize} is currently logged in." %></td>
 	                <% end %>
 	              <% else %>
-                  <td ><%= link_to "Invite Friend", root_path, class: "btn btn-primary" %></td>
+                  <td ><%= link_to "Invite Friend", invite_user_path, class: "btn btn-primary" %></td>
                 <% end %>
                 <td colspan="2" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), class: "btn btn-danger" %></td>
 			      	<% else %>

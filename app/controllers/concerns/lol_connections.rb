@@ -15,7 +15,7 @@ module LolConnections
     @champsReq = Lol::StaticRequest.new Rails.application.secrets.sulai_api_key, "na"
   end
 
-   def create_search_connection
+  def create_search_connection
     create_summoner_connection
     create_champ_connection
   end
@@ -74,7 +74,6 @@ module LolConnections
     #Static request doesn't blow up because it is static data that does not change .
     #Stats request and summoner request have blown up so far, so this verification prevents us from creating an account for someone
     #whose stats or summoner request will blow up.
-
     begin
       create_summoner_connection
       @summonerObj = @summonerReq.by_name(user_params[:name]).first
@@ -95,11 +94,23 @@ module LolConnections
       end
     end
   end
+
+  def get_summoner
+    create_summoner_connection
+    @summonerObj = @summonerReq.by_name(User.find(params[:id]).name).first
+    get_summoner_ranked_stats(@summonerObj.id)
+    create_champ_connection
+    get_most_played_champ
+    get_overall_WLR
+    get_overall_KDR
+    get_highest_KDR_champ
+    get_highest_WLR_champ
+  end
   
   def search_summoner
     create_search_connection
     begin
-      @summoner = @summonerReq.by_name(params[:summoner].downcase).first
+      @summoner = @summonerReq.by_name(@name).first
       get_summoner_ranked_stats(@summoner.id)
     rescue Lol::NotFound => e
       if e.message == '404 Not Found'
@@ -123,5 +134,4 @@ module LolConnections
     end
     get_search_stats
   end
-  
 end
