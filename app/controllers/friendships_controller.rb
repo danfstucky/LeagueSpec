@@ -5,6 +5,7 @@ class FriendshipsController < ApplicationController
   before_action :check_or_set_user, except: [:destroy]
   before_action :require_same_user, only: [:edit, :decide]
   FRIENDS_LIST_LENGTH = 5.freeze
+
   def new
     friend = User.find_by_name(params[:summoner_to_add].to_s.downcase)
     friendship = Friendship.new(:user_id => @user.id, :friend_id => friend.id, :initiator => true)
@@ -85,6 +86,7 @@ class FriendshipsController < ApplicationController
   end
 
   private
+
   def require_same_user
     if @user != User.find_by(email: params[:friend_email])
       flash[:danger] = "Only summoner requests sent to your email can be accessed. Login to LeagueSpec with the right email and click request link again."
@@ -95,6 +97,7 @@ class FriendshipsController < ApplicationController
   def get_requester
     User.find_by(email: params[:requester_email])
   end
+
   def get_friendship(requester_id)
     @user.friendships_not_initiated_by_me.find_by(friend_id: requester_id)
   end

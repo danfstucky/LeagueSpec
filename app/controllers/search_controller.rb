@@ -1,16 +1,13 @@
 class SearchController < ApplicationController
-  include LolConnections
+  
   def search
-    @summonerErrors = []
-    @summonerErrors << "Summoner name must be at least 2 characters, verify summoner name is valid and search again." if (params[:summoner].length < 2)
-    @summonerErrors << "Summoner name must be less than 24 characters, verify summoner name is valid and search again." if (params[:summoner].length > 24)
-    if @summonerErrors.empty?
-      downcase_and_search_summoner(params[:summoner])
+    @name = params[:summoner]
+    if valid_search?
+      search_service = SearchService.new(@name)
+      @search_stats = search_service.search_stats
     else 
-      flash[:danger] = @summonerErrors[0]
       redirect_to :back
-    end
-    
+    end   
   end
 
   def search_to_invite
@@ -34,9 +31,17 @@ class SearchController < ApplicationController
 
   private
 
-  def downcase_and_search_summoner(param_to_search)
-    @name = param_to_search.to_s.downcase
-    search_summoner
+  def valid_search?
+    if @name.length < 2
+      flash[:danger] = "Summoner name must be at least 2 characters, verify summoner name is valid and search again."
+      false
+    elsif @name.length > 24
+      flash[:danger] = "Summoner name must be less than 24 characters, verify summoner name is valid and search again."
+      false
+    else
+      true
+    end
   end
-
+  
 end
+

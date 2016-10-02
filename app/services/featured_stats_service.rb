@@ -1,4 +1,5 @@
 class FeaturedStatsService < LolClient
+  TOP_FIVE = 5.freeze
 
   def initialize(user)
     super()
@@ -11,12 +12,12 @@ class FeaturedStatsService < LolClient
 
   # Returns a hash of player's champion statistics
   def featured_stats
-    player_data =  {}
-    player_data[:summoner]    = @player
-    player_data[:top_played]  = process_champion_list(top_played_champs)
-    player_data[:top_kd]      = process_champion_list(top_kd_champs)
-    player_data[:top_wl]      = process_champion_list(top_wl_champs)
-    player_data
+    player_data =  {
+      summoner:     @player,
+      top_played:   filter_champs(top_played_champs, TOP_FIVE),
+      top_kd:       filter_champs(top_kd_champs, TOP_FIVE),
+      top_wl:       filter_champs(top_wl_champs, TOP_FIVE)
+    }
   end
 
   # Returns a hash of player's overall statistics
@@ -25,38 +26,6 @@ class FeaturedStatsService < LolClient
   end
 
   private 
-
-  # Create champion objects for top 5 champions in input list
-  def process_champion_list(champ_list)
-    champ_list[0,5].map { |champ| ChampionPresenter.new(client, champ) }
-  end
-
-  # Retrieve champions sorted by most played for logged in player
-  def top_played_champs
-    @player_champs_list.sort_by{ |champ| -champ.stats.total_sessions_played }
-  end
-
-  # Retrieve champions sorted by top K/D for logged in player
-  def top_kd_champs
-    @player_champs_list.sort_by do |champ|
-      if champ.stats.total_deaths_per_session >  0
-        -(champ.stats.most_champion_kills_per_session.to_f / champ.stats.total_deaths_per_session)
-      else 
-        -(champ.stats.most_champion_kills_per_session.to_f) 
-      end
-    end 
-  end
-
-  # Retrieve champions sorted by top W/L for logged in player
-  def top_wl_champs
-    @player_champs_list.sort_by do |champ|
-      if champ.stats.total_sessions_lost >  0
-        -(champ.stats.total_sessions_won.to_f / champ.stats.total_sessions_lost)
-      else 
-        -(champ.stats.total_sessions_won.to_f)
-      end
-    end
-  end
 
   # Retrieve player's overall W/L
   def overall_WLR
