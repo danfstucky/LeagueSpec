@@ -1,19 +1,21 @@
-class FeaturedStatsService < LolClient
+# Service that retrieves data featured on player profiles.
+class FeaturedStatsService < BaseService
   TOP_FIVE = 5.freeze
 
-  def initialize(user)
+  def initialize(user_name)
     super()
-    @player = client.summoner.by_name(user.name).first
-    @player_champs_list = client.stats.ranked(@player.id).champions
-    if @player_champs_list
-      @player_champs_list.delete_if{ |h| h.id == 0 }
-    end
+    @player = Summoner.new(user_name)
+    @player_champs_list = champ_stats
   end
 
-  # Returns a hash of player's champion statistics
+  # Returns a hash of player's champion statistics:
+  #   summoner      - The currently logged in player's summoner profile.
+  #   top_played    - Top 5 champions that player has played the most games with.
+  #   top_kd        - Top 5 champions that player has best kill/death ratio with.
+  #   top_wl        - Top 5 champions that player has best win/loss ratio with.
   def featured_stats
     player_data =  {
-      summoner:     @player,
+      summoner:     @player.summoner,
       top_played:   filter_champs(top_played_champs, TOP_FIVE),
       top_kd:       filter_champs(top_kd_champs, TOP_FIVE),
       top_wl:       filter_champs(top_wl_champs, TOP_FIVE)
@@ -25,15 +27,15 @@ class FeaturedStatsService < LolClient
     { kd: overall_KDR, wl: overall_WLR }
   end
 
-  private 
+  private
 
   # Retrieve player's overall W/L
   def overall_WLR
     overall_losses = 0
     overall_wins = 0
     @player_champs_list.each do |champ|
-      overall_losses += champ.stats.total_sessions_lost
-      overall_wins += champ.stats.total_sessions_won 
+      overall_losses += champ.total_losses
+      overall_wins += champ.total_wins
     end
     overall_losses > 0 ? (overall_wins.to_f / overall_losses).round(2) : overall_wins.to_f
   end
@@ -43,8 +45,8 @@ class FeaturedStatsService < LolClient
     overall_deaths = 0
     overall_kills = 0
     @player_champs_list.each do |champ|
-      overall_deaths += champ.stats.total_deaths_per_session
-      overall_kills += champ.stats.most_champion_kills_per_session
+      overall_deaths += champ.total_deaths
+      overall_kills += champ.total_kills
     end
     overall_deaths > 0 ? (overall_kills.to_f / overall_deaths).round(2) : overall_kills.to_f
   end

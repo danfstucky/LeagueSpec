@@ -3,8 +3,8 @@ class SearchController < ApplicationController
   def search
     @name = params[:summoner]
     if valid_search?
-      search_service = SearchService.new(@name)
-      @search_stats = search_service.search_stats
+      search_service = BasicStatsService.new(@name)
+      @search_stats = search_service.basic_stats
     else 
       redirect_to :back
     end   

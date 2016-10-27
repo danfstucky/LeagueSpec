@@ -1,6 +1,5 @@
 class FriendshipsController < ApplicationController
-  include LolConnections
-  before_action :search_summoner_for_request_action, only: [:edit]
+  include SessionsHelper
   before_action :require_user
   before_action :check_or_set_user, except: [:destroy]
   before_action :require_same_user, only: [:edit, :decide]
@@ -21,8 +20,9 @@ class FriendshipsController < ApplicationController
   end
 
   def edit
-    @requester ||= get_requester
-    friendship ||= get_friendship(@requester.id)
+    friend_service = BasicStatsService.new(current_user.name)
+    @friend_stats = friend_service.basic_stats
+    friendship ||= get_friendship(@friend_stats[:spec_user].id)
     if friendship.request_responded_at != nil
       flash[:danger] = "You have either accepted or denied that request. If you'd like to add summoner, send a new LeagueSpec request"
       redirect_to profile_path(@user.id)
