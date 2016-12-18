@@ -6,8 +6,8 @@ class ProfilesController < ApplicationController
   end
 
   def show
-    @user ||= current_user
-    featured_stats_service = FeaturedStatsService.new(@user.name)
+    @user = User.exists?(id: params[:id]) ? User.find(params[:id]) : current_user
+    featured_stats_service = FeaturedStatsService.new(@user)
     @featured_stats = featured_stats_service.featured_stats
     @overall_stats = featured_stats_service.overall_stats
   end

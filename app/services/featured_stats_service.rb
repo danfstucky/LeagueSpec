@@ -2,19 +2,22 @@
 class FeaturedStatsService < BaseService
   TOP_FIVE = 5.freeze
 
-  def initialize(user_name)
+  def initialize(user)
     super()
-    @player = Summoner.new(user_name)
+    @user = user
+    @player = Summoner.new(user.name)
     @player_champs_list = champ_stats
   end
 
   # Returns a hash of player's champion statistics:
+  #   spec_user     - The LeagueSpec user associated with the profile data.
   #   summoner      - The currently logged in player's summoner profile.
   #   top_played    - Top 5 champions that player has played the most games with.
   #   top_kd        - Top 5 champions that player has best kill/death ratio with.
   #   top_wl        - Top 5 champions that player has best win/loss ratio with.
   def featured_stats
     player_data =  {
+      spec_user:    @user,
       summoner:     @player.summoner,
       top_played:   filter_champs(top_played_champs, TOP_FIVE),
       top_kd:       filter_champs(top_kd_champs, TOP_FIVE),

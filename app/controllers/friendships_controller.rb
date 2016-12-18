@@ -14,7 +14,7 @@ class FriendshipsController < ApplicationController
       flash[:info] = "Summoner request sent."
       redirect_to profile_path(@user.id)
     else
-      flash[:danger] = friendship.errors.messages[:base][0]
+      flash[:danger] = 'Failed to add friend.'
       redirect_to :back
     end
   end

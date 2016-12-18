@@ -47,7 +47,7 @@
                       <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), class: "btn btn-success" %></td>
                     <% end %>
                     <% puts @search_stats[:summoner].id %>
-                    <td><%= link_to "View Profile", profile_path(@search_stats[:summoner].id), class: "btn btn-primary" %></td>
+                    <td><%= link_to "View Profile", profile_path(@search_stats[:spec_user].id), class: "btn btn-primary" %></td>
                   <% else %>
                     <td class="badge"><%= "#{@current_user.name.capitalize} is currently logged in." %></td>
                   <% end %>
