@@ -17,16 +17,14 @@ class BasicStatsService < BaseService
   # Returns a hash of player's champion statistics:
   #   spec_user     - The LeagueSpec user associated with the profile data.
   #   summoner      - The currently logged in player's summoner profile.
-  #   reg_spec_user - Boolean representing whether the player is registered with LolSpec.
   #   top_played    - Champion that player has played the most games with.
   #   top_kd        - Champion that player has best kill/death ratio with.
   #   top_wl        - Champion that player has best win/loss ratio with.
   def basic_stats
     if @player_champs_list.present?
-      player_data =  {
+      {
         spec_user:     User.find_by(name: @player.summoner.name.downcase),
         summoner:      @player.summoner,
-        reg_spec_user: @player.registered_user?,
         top_played:    first_champ(top_played_champs),
         top_kd:        first_champ(top_kd_champs),
         top_wl:        first_champ(top_wl_champs)
@@ -34,6 +32,13 @@ class BasicStatsService < BaseService
     else 
       nil
     end
+  end
+
+  def person_info
+    {
+      spec_user: User.find_by(name: @player.summoner.name.downcase),
+      summoner:  @player.summoner
+    }
   end
 
   private
