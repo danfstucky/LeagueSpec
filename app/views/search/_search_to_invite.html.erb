@@ -11,11 +11,12 @@
         </div>
         <div class="col-md-6">
           <span id="summoner_name_feedback", class="feedback">
-            <% if @summoner %> 
-              Yes! <%= @name.capitalize %> is not yet on LeagueSpec. Enter email below to invite.
-            <% end %>
-            <% if @registeredUser %> 
-              Sorry, <%= @registeredUser.name.capitalize %> is already on LeagueSpec, can't send invitation.
+            <% if @person_info %>
+              <% if @person_info[:spec_user] %> 
+                Sorry, <%= @person_info[:spec_user].name.capitalize %> is already on LeagueSpec, can't send invitation.
+              <% elsif @person_info[:summoner] %> 
+                Yes! <%= @person_info[:summoner].name %> is not yet on LeagueSpec. Enter email below to invite.
+              <% end %>
             <% end %>
           </span>
         </div>
@@ -26,11 +27,12 @@
       <% end %>
     </div>
   <% end %>
+  
   <%= form_tag send_invitation_path, method: :get, id: "email-summoner-form", class: "email-form" do %>
     <div class="col-md-12 form-container">
       <div class="row summoner-name">
         <div class="col-md-6 summoner">
-          <%= hidden_field_tag :summoner, @name %>
+          <%= hidden_field_tag :summoner, @person_info[:summoner].name if @person_info %>
         </div>
       </div>
       <div class="row invite-row email">

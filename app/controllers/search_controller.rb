@@ -3,8 +3,8 @@ class SearchController < ApplicationController
   def search
     @name = params[:summoner]
     if valid_search?
-      search_service = SearchService.new(@name)
-      @search_stats = search_service.search_stats
+      search_service = BasicStatsService.new(@name)
+      @search_stats = search_service.basic_stats
     else 
       redirect_to :back
     end   
@@ -12,16 +12,15 @@ class SearchController < ApplicationController
 
   def search_to_invite
     if params[:summoner_name]
-      @registeredUser = User.find_summoner_by_name(params[:summoner_name].to_s.downcase)
-      gon.registeredUser = @registeredUser
-      if @registeredUser
+      search_service = BasicStatsService.new(params[:summoner_name])
+      @person_info = search_service.person_info
+      gon.registeredUser = @person_info[:spec_user]
+      if @person_info[:spec_user]
         render partial: 'search_to_invite' and return
-      else
-        downcase_and_search_summoner(params[:summoner_name])
-        gon.summoner = @summoner
       end
     end
-    if @summoner
+    if @person_info[:summoner]
+      gon.summoner = @person_info[:summoner]
       render partial: 'search_to_invite'
     else
       @search_error = true
@@ -42,6 +41,4 @@ class SearchController < ApplicationController
       true
     end
   end
-  
 end
-

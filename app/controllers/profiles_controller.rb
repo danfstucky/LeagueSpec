@@ -1,15 +1,12 @@
-
 class ProfilesController < ApplicationController
-  include LolConnections
   before_action :require_user, only: [:show]
   before_action :check_or_set_user, except: [:index]
-  before_action :verify_summoner_name_and_stats, only: [:create]
 
   def index
   end
 
   def show
-    @user ||= current_user
+    @user = User.exists?(id: params[:id]) ? User.find(params[:id]) : current_user
     featured_stats_service = FeaturedStatsService.new(@user)
     @featured_stats = featured_stats_service.featured_stats
     @overall_stats = featured_stats_service.overall_stats
@@ -31,17 +28,15 @@ class ProfilesController < ApplicationController
   end
     
   def send_invitation
-    @emailErrors = []
-    @emailErrors << "Summoner email must match its confirmation." if (params[:summoner_email]==nil)
-    if @emailErrors.empty?
+    if params[:summoner_email].nil?
+      flash[:danger] = "Summoner email is required."
+      redirect_to :back
+    else
       email = params[:summoner_email].to_s.downcase
       @name = params[:summoner].to_s.downcase
       UserMailer.invitation_request(@user, email, @name).deliver_now
       flash[:info] = "Invitation to join LeagueSpec was successfully sent to #{@name.capitalize}."
       redirect_to profile_path(@user.id)
-    else 
-      flash[:danger] = @emailErrors[0]
-      redirect_to :back
     end
   end
 

@@ -40,13 +40,13 @@
             <% if logged_in? %> <!-- Only logged in users can add friends -->
               <% if @search_stats %> <!-- Does the searched user play LoL? -->
                 <% if @search_stats[:spec_user] %> <!-- Does player have a LeagueSpec profile? -->
-                  <% if @search_stats[:spec_user] != current_user %> <!-- Is player the currently logged in user? -->
-                    <% if @current_user.friendships.exists?(friend_id: @search_stats[:spec_user].id) %> <!-- Is player already a friend? -->
-                      <td class="badge"><%= "#{@current_user.friendships.find_by_friend_id(@search_stats[:spec_user].id).friendship_status.capitalize} Request" %></td>
+                  <% if @search_stats[:summoner] != current_user %> <!-- Is player the currently logged in user? -->
+                    <% if @current_user.friendships.exists?(friend_id: @search_stats[:summoner].id) %> <!-- Is player already a friend? -->
+                      <td class="badge"><%= "#{@current_user.friendships.find_by_friend_id(@search_stats[:summoner].id).friendship_status.capitalize} Request" %></td>
                     <% else %>
                       <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), class: "btn btn-success" %></td>
                     <% end %>
-                    <% puts @search_stats[:spec_user].id %>
+                    <% puts @search_stats[:summoner].id %>
                     <td><%= link_to "View Profile", profile_path(@search_stats[:spec_user].id), class: "btn btn-primary" %></td>
                   <% else %>
                     <td class="badge"><%= "#{@current_user.name.capitalize} is currently logged in." %></td>
@@ -60,7 +60,7 @@
               <% end %>
             <% else %>
               <% if @search_stats %>
-                <% if @search_stats[:spec_user] %>
+                <% if @search_stats[:summoner] %>
                   <td><%= link_to "Login to Add Summoner", login_path, class: "btn btn-success" %></td>
                 <% else %>
                   <td><%= link_to "Login to Invite Summoner", login_path, class: "btn btn-success" %></td>
