@@ -16,7 +16,7 @@
       <div class="champ-img">
         <span class="imgWrap"><%= link_to image_tag("icons/AhriSquare.png"), profile_path(friendship.friend.id)  %></span>
         <div class="status-icon">
-	        <% if friendship.friend.logged_in == true %>
+	        <% if friendship.friend.logged_in %>
 	           <%= image_tag("online_icon.png") %>
 	        <% elsif friendship.friend.last_logged_in >= (Date.today - 1) %>
 	          <%= image_tag("recently_active_icon.png") %>

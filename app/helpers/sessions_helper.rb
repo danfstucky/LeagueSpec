@@ -28,6 +28,10 @@ module SessionsHelper
 		end
 	end
 
+	def check_or_set_user
+	  @user ||= current_user
+	end
+
 	# Returns true if the user is logged in, false otherwise.
 	def logged_in?
 		!current_user.nil?
@@ -49,10 +53,10 @@ module SessionsHelper
 	end
 
   #Ensures user is logged in to perform certain actions.
-	def require_user
-  if !logged_in?
-    flash[:danger] = "You must be logged in to perform that action"
-    redirect_to root_path
+  def require_user
+  	if !logged_in?
+  		flash[:danger] = "You must be logged in to perform that action"
+  		redirect_to root_path
+  	end
   end
-	end
 end

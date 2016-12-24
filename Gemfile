@@ -28,11 +28,13 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt', '~> 3.1.10'
 
 #Include Lol-Api
-gem 'ruby-lol'
+gem 'ruby-lol', '~> 0.12'
 
 gem 'certified'
 
 gem 'will_paginate'
+
+gem 'gon'
 
 # Use Unicorn as the app server
 # gem 'unicorn'

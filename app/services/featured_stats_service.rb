@@ -1,22 +1,28 @@
-class FeaturedStatsService < LolClient
+# Service that retrieves data featured on player profiles.
+class FeaturedStatsService < BaseService
+  TOP_FIVE = 5.freeze
 
   def initialize(user)
     super()
-    @player = client.summoner.by_name(user.name).first
-    @player_champs_list = client.stats.ranked(@player.id).champions
-    if @player_champs_list
-      @player_champs_list.delete_if{ |h| h.id == 0 }
-    end
+    @user = user
+    @player = Summoner.new(user.name)
+    @player_champs_list = champ_stats
   end
 
-  # Returns a hash of player's champion statistics
+  # Returns a hash of player's champion statistics:
+  #   spec_user     - The LeagueSpec user associated with the profile data.
+  #   summoner      - The currently logged in player's summoner profile.
+  #   top_played    - Top 5 champions that player has played the most games with.
+  #   top_kd        - Top 5 champions that player has best kill/death ratio with.
+  #   top_wl        - Top 5 champions that player has best win/loss ratio with.
   def featured_stats
-    player_data =  {}
-    player_data[:summoner]    = @player
-    player_data[:top_played]  = process_champion_list(top_played_champs)
-    player_data[:top_kd]      = process_champion_list(top_kd_champs)
-    player_data[:top_wl]      = process_champion_list(top_wl_champs)
-    player_data
+    player_data =  {
+      spec_user:    @user,
+      summoner:     @player.summoner,
+      top_played:   filter_champs(top_played_champs, TOP_FIVE),
+      top_kd:       filter_champs(top_kd_champs, TOP_FIVE),
+      top_wl:       filter_champs(top_wl_champs, TOP_FIVE)
+    }
   end
 
   # Returns a hash of player's overall statistics
@@ -24,47 +30,15 @@ class FeaturedStatsService < LolClient
     { kd: overall_KDR, wl: overall_WLR }
   end
 
-  private 
-
-  # Create champion objects for top 5 champions in input list
-  def process_champion_list(champ_list)
-    champ_list[0,5].map { |champ| ChampionPresenter.new(client, champ) }
-  end
-
-  # Retrieve champions sorted by most played for logged in player
-  def top_played_champs
-    @player_champs_list.sort_by{ |champ| -champ.stats.total_sessions_played }
-  end
-
-  # Retrieve champions sorted by top K/D for logged in player
-  def top_kd_champs
-    @player_champs_list.sort_by do |champ|
-      if champ.stats.total_deaths_per_session >  0
-        -(champ.stats.most_champion_kills_per_session.to_f / champ.stats.total_deaths_per_session)
-      else 
-        -(champ.stats.most_champion_kills_per_session.to_f) 
-      end
-    end 
-  end
-
-  # Retrieve champions sorted by top W/L for logged in player
-  def top_wl_champs
-    @player_champs_list.sort_by do |champ|
-      if champ.stats.total_sessions_lost >  0
-        -(champ.stats.total_sessions_won.to_f / champ.stats.total_sessions_lost)
-      else 
-        -(champ.stats.total_sessions_won.to_f)
-      end
-    end
-  end
+  private
 
   # Retrieve player's overall W/L
   def overall_WLR
     overall_losses = 0
     overall_wins = 0
     @player_champs_list.each do |champ|
-      overall_losses += champ.stats.total_sessions_lost
-      overall_wins += champ.stats.total_sessions_won 
+      overall_losses += champ.total_losses
+      overall_wins += champ.total_wins
     end
     overall_losses > 0 ? (overall_wins.to_f / overall_losses).round(2) : overall_wins.to_f
   end
@@ -74,8 +48,8 @@ class FeaturedStatsService < LolClient
     overall_deaths = 0
     overall_kills = 0
     @player_champs_list.each do |champ|
-      overall_deaths += champ.stats.total_deaths_per_session
-      overall_kills += champ.stats.most_champion_kills_per_session
+      overall_deaths += champ.total_deaths
+      overall_kills += champ.total_kills
     end
     overall_deaths > 0 ? (overall_kills.to_f / overall_deaths).round(2) : overall_kills.to_f
   end

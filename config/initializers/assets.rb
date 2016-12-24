@@ -8,6 +8,7 @@ Rails.application.config.assets.precompile += [ 'sessions.css', 'profiles.css', 
 # Add images here
 Rails.application.config.assets.precompile += %w( offline_icon.png )
 Rails.application.config.assets.precompile += [ 'ahri_lol_small.png', 'login_banner.png', 'login_bg', 'signup_banner.png' ]
+Rails.application.config.assets.precompile += %w( formValidate.js )
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path
 
