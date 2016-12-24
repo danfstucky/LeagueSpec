@@ -1,0 +1,53 @@
+<head>
+  <%= include_gon %>
+</head>
+<div id="search-to-invite" class="col-md-8 col-md-offset-2 <%= controller_name %> <%= action_name %>"> 
+  <div class="col-md-6 header">LeagueSpec Invitation</div>
+  <%= form_tag search_to_invite_path, remote: true, method: :get, id: "search-summoner-form", class: "invitation-form" do %>
+    <div class="col-md-12 form-container">
+      <div class="row invite-row">
+        <div class="col-md-6 invite-field field">
+          <%= text_field_tag :summoner_name, params[:summoner_name], class: "form-control search-box", id: "summoner_name", placeholder: "Summoner Name", autofocus: true%>
+        </div>
+        <div class="col-md-6">
+          <span id="summoner_name_feedback", class="feedback">
+            <% if @person_info %>
+              <% if @person_info[:spec_user] %> 
+                Sorry, <%= @person_info[:spec_user].name.capitalize %> is already on LeagueSpec, can't send invitation.
+              <% elsif @person_info[:summoner] %> 
+                Yes! <%= @person_info[:summoner].name %> is not yet on LeagueSpec. Enter email below to invite.
+              <% end %>
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-md-offset-2 input-group-btn">
+      <%= button_tag(type: :submit, class: "btn btn-success", id: 'sbmt-btn', data: { disable_with: "Initiating invitation..." }) do %>Initiate Invitation
+      <% end %>
+    </div>
+  <% end %>
+  
+  <%= form_tag send_invitation_path, method: :get, id: "email-summoner-form", class: "email-form" do %>
+    <div class="col-md-12 form-container">
+      <div class="row summoner-name">
+        <div class="col-md-6 summoner">
+          <%= hidden_field_tag :summoner, @person_info[:summoner].name if @person_info %>
+        </div>
+      </div>
+      <div class="row invite-row email">
+        <div class="col-md-6 invite-field field">
+          <%= text_field_tag :summoner_email, params[:summoner_email], class: "form-control summoner-search-box", id: "summoner_email", placeholder: "Summoner Email"%>
+        </div>
+        <div class="col-md-6">
+          <span id="summoner_email_feedback", class="feedback">
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-md-offset-2 input-group-btn">
+      <%= button_tag(type: :submit, class: "btn btn-success", id: 'send-btn', data: { disable_with: "Sending invitation..." }) do %>Send Invitation
+      <% end %>
+    </div>
+  <% end %>
+</div>

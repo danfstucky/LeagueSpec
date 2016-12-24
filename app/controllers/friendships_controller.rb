@@ -1,10 +1,10 @@
 class FriendshipsController < ApplicationController
-  include LolConnections
-  before_action :search_summoner_for_request_action, only: [:edit]
+  include SessionsHelper
   before_action :require_user
-  before_action :set_user
+  before_action :check_or_set_user, except: [:destroy]
   before_action :require_same_user, only: [:edit, :decide]
   FRIENDS_LIST_LENGTH = 5.freeze
+
   def new
     friend = User.find_by_name(params[:summoner_to_add].to_s.downcase)
     friendship = Friendship.new(:user_id => @user.id, :friend_id => friend.id, :initiator => true)
@@ -14,14 +14,15 @@ class FriendshipsController < ApplicationController
       flash[:info] = "Summoner request sent."
       redirect_to profile_path(@user.id)
     else
-      flash[:danger] = friendship.errors.messages[:base][0]
+      flash[:danger] = 'Failed to add friend.'
       redirect_to :back
     end
   end
 
   def edit
-    @requester ||= get_requester
-    friendship ||= get_friendship(@requester.id)
+    friend_service = BasicStatsService.new(current_user.name)
+    @friend_stats = friend_service.basic_stats
+    friendship ||= get_friendship(@friend_stats[:spec_user].id)
     if friendship.request_responded_at != nil
       flash[:danger] = "You have either accepted or denied that request. If you'd like to add summoner, send a new LeagueSpec request"
       redirect_to profile_path(@user.id)
@@ -85,9 +86,9 @@ class FriendshipsController < ApplicationController
   end
 
   private
+
   def require_same_user
-    @user ||= User.find_by(email: params[:friend_email])
-    if current_user != @user
+    if @user != User.find_by(email: params[:friend_email])
       flash[:danger] = "Only summoner requests sent to your email can be accessed. Login to LeagueSpec with the right email and click request link again."
       redirect_to :back
     end
@@ -96,10 +97,8 @@ class FriendshipsController < ApplicationController
   def get_requester
     User.find_by(email: params[:requester_email])
   end
+
   def get_friendship(requester_id)
     @user.friendships_not_initiated_by_me.find_by(friend_id: requester_id)
-  end
-  def set_user
-    @user ||= current_user
   end
 end

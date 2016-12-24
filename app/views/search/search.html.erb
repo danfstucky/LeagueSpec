@@ -1,107 +1,78 @@
 <div class="search-page" id="summoner-lookup">
   
   <div class="col-md-5 col-md-offset-3">
-  	<div class="table-responsive">
-		  <table class="table search-table" cellspacing="0" style="border-spacing: 0;">
-		    <thead>
-		    	<tr>
-		    		<th colspan="3" scope="colgroup" class="header search-header">Summoner Search Result</th>
-		    	</tr>
-		    </thead>
-		    <tbody class="search-row">
-		      <% if @summoner %>
-		        <tr>
-		        	<td ><strong>Summoner Name: <%= @name.capitalize %></strong></td>
-              <% if @statsObj %>
-		        	  <td ><strong>Most Played Champ: <%= @mpChamp[:name]%> </strong><%= " - (#{@mostPlayedChampObj.stats.total_sessions_played}x)"%></td>
-		        	  <td class="champ-img" rowspan="3" scope="rowgroup"><%= link_to image_tag("icons/#{@mpChamp[:name].delete(' ')}Square.png"), champion_path(@mpChamp.id)  %></td>
-		        	<% else %>
-                <td colspan="2" scope="colgroup" ><strong>No stats found for summoner.</strong></td>
-              <% end %>
-		        </tr>
-		        <tr>
-		        	<td ><strong>Summoner Level: <%= @summoner.summoner_level %></strong></td>
-		        	<% if @statsObj %>
+    <div class="table-responsive">
+      <table class="table search-table">
+        <thead>
+          <tr>
+            <th colspan="3" class="header search-header">Summoner Search Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @search_stats.present? %>
+            <tr>
+              <td><strong>Summoner Name:</strong> <%= @search_stats[:summoner].name %></td>
+              <td><strong>Most Played Champ:</strong> <%= @search_stats[:top_played].most_played %></td>
+              <td class="champ-img" rowspan="3">
+                <%= link_to image_tag(@search_stats[:top_played].icon), champion_path(@search_stats[:top_played].id) %>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Summoner Level:</strong> <%= @search_stats[:summoner].summoner_level %></td>
+              <td><strong>Highest KDR Champ:</strong> <%= @search_stats[:top_kd].best_kd %></td>
+            </tr>
+            <tr>
+              <td><strong>Last Active:</strong> <%= @search_stats[:summoner].revision_date.to_s.slice(0,10) %></td>
+              <td><strong>Highest WLR Champ:</strong> <%= @search_stats[:top_wl].best_wl %></td>
+            </tr>
+          <% else %>
+            <tr>
+              <td class="no-results"><%= "#{@name} is not a recognized League of Legends player." %></td>
+            </tr>
+            <tr>
+              <td class="no-results"><%= "Verify that #{@name} is a valid summoner name and try again." %></td>
+            </tr>
+          <% end %>
+        </tbody>
 
-			        	<td ><strong>Highest KDR Champ: <%= @hkdrChamp[:name]%> </strong> 
-			    		                                    <% if @highestKillDeathRatioChampObj[0].stats.total_deaths_per_session >  0 %>
-	                                                  <%= " - (#{((@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session.to_f)/(@highestKillDeathRatioChampObj[0].stats.total_deaths_per_session)).round(2)})"%>
-	                                                <%else%>
-	                                                  <%= " - (#{(@highestKillDeathRatioChampObj[0].stats.most_champion_kills_per_session.to_f.round(2))})"%>
-	                                                <%end%>
-		            </td>
-
-			        <% else %>
-			          <td colspan="2" scope="colgroup" rowspan="2" scope="rowgroup"><strong>Either summoner is inactive or there are no stats to display.</strong></td>
-			        <% end %>
-		        </tr>
-		        <tr>
-		          <td ><strong>Last Active: <%= @summoner.revision_date.to_s.slice(0,10) %></strong></td>
-		          <% if @statsObj %>
-		            <td ><strong>Highest WLR Champ: <%= @hwlrChamp[:name]%> </strong> 
-			    		                                    <% if @highestWinLossRatioChampObj[0].stats.total_deaths_per_session >  0 %>
-	                                                  <%= " - (#{((@highestWinLossRatioChampObj[0].stats.most_champion_kills_per_session.to_f)/(@highestWinLossRatioChampObj[0].stats.total_deaths_per_session)).round(2)})"%>
-	                                                <%else%>
-	                                                  <%= " - (#{(@highestWinLossRatioChampObj[0].stats.most_champion_kills_per_session.to_f.round(2))})"%>
-	                                                <%end%>
-	              </td>
-		          <% end %>
-		        </tr>
-		      <% else %>
-		        <tr>
-		        	<td align="center" colspan="3" scope="colgroup" ><strong><%= @name.capitalize %> is not a recognized League of Legends player. </strong>
-		        	</td>
-		        </tr>
-		        <tr>
-		        	<td align="center" colspan="3" scope="colgroup" rowspan="2" scope = "rowgroup"><strong> Verify that <%= @name.capitalize %> is a valid summoner name and try again.</strong>
-		        	</td>
-		        </tr>
-    		  <% end %>
-		    </tbody>
-		    <tfoot>
-		      <tr data-no-turbolink>
-            <%if logged_in? %>		      
-			      	<% if @statsObj %>
-                <% if @registeredUser %><!--Confirm that user is not already a friend-->
-                  <% if @registeredUser != current_user %>
-	                  <% if @registeredUser.activated %>
-		                  <% if @current_user.friendships.exists?(friend_id: @registeredUser.id)%>
-		                    <td class="badge" ><%= "#{@current_user.friendships.find_by_friend_id(@registeredUser.id).friendship_status.capitalize} Request" %></td>
-		                  <% else %>
-		                    <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), class: "btn btn-success" %></td>
-		                  <% end %>
-		                  <td ><%= link_to "View Profile", profile_path(@registeredUser.id), class: "btn btn-primary" %></td>
-	                  <% else %>
-	                    <td ><%= link_to "Invite Friend", root_path, class: "btn btn-primary" %></td>
-	                  <% end %>
-	                <% else %>
-	                  <td class="badge" ><%= "#{@current_user.name.capitalize} is currently logged in." %></td>
-	                <% end %>
-	              <% else %>
-                  <td ><%= link_to "Invite Friend", root_path, class: "btn btn-primary" %></td>
+        <tfoot>
+          <tr data-no-turbolink>
+            <% if logged_in? %> <!-- Only logged in users can add friends -->
+              <% if @search_stats %> <!-- Does the searched user play LoL? -->
+                <% if @search_stats[:spec_user] %> <!-- Does player have a LeagueSpec profile? -->
+                  <% if @search_stats[:summoner] != current_user %> <!-- Is player the currently logged in user? -->
+                    <% if @current_user.friendships.exists?(friend_id: @search_stats[:summoner].id) %> <!-- Is player already a friend? -->
+                      <td class="badge"><%= "#{@current_user.friendships.find_by_friend_id(@search_stats[:summoner].id).friendship_status.capitalize} Request" %></td>
+                    <% else %>
+                      <td><%= link_to "Add Summoner", new_friendship_url(summoner_to_add: params[:summoner]), class: "btn btn-success" %></td>
+                    <% end %>
+                    <% puts @search_stats[:summoner].id %>
+                    <td><%= link_to "View Profile", profile_path(@search_stats[:spec_user].id), class: "btn btn-primary" %></td>
+                  <% else %>
+                    <td class="badge"><%= "#{@current_user.name.capitalize} is currently logged in." %></td>
+                  <% end %>
+                <% else %>
+                  <td><%= link_to "Invite Friend", invite_user_path, class: "btn btn-primary" %></td>
                 <% end %>
                 <td colspan="2" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), class: "btn btn-danger" %></td>
-			      	<% else %>
-			      	  <td colspan="3" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), class: "btn btn-danger" %></td>
-			      	<% end %>
-			      <% else %>
-			        <% if @statsObj %>
-                <% if @registeredUser %>
-                  <td ><%= link_to "Login to Add Summoner", login_path, class: "btn btn-success" %></td>
-                  <td ><%= link_to "Sign Up to Add Summoner", new_profile_path, class: "btn btn-primary" %></td>
-                <% else %>
-                  <td  ><%= link_to "Login to Invite Summoner", login_path, class: "btn btn-success" %></td>
-                  <td  ><%= link_to "Sign Up and Invite Summoner", new_profile_path, class: "btn btn-primary" %></td>
-                <% end %>
-                <td ><%= link_to "Dismiss Search", root_path, class: "btn btn-danger" %></td>
               <% else %>
-                <td  colspan="3" scope="colgroup"><%= link_to "Dismiss Search", root_path, class: "btn btn-danger" %></td>
+                <td colspan="3" scope="colgroup"><%= link_to "Dismiss Search", profile_path(@current_user.id), class: "btn btn-danger" %></td>
               <% end %>
-			      <% end %>
-		      </tr>
-		    </tfoot>
-		  </table>
+            <% else %>
+              <% if @search_stats %>
+                <% if @search_stats[:summoner] %>
+                  <td><%= link_to "Login to Add Summoner", login_path, class: "btn btn-success" %></td>
+                <% else %>
+                  <td><%= link_to "Login to Invite Summoner", login_path, class: "btn btn-success" %></td>
+                <% end %>
+                <td colspan="2"><%= link_to "Dismiss Search", root_path, class: "btn btn-danger" %></td>
+              <% else %>
+                <td colspan="3" scope="colgroup"><%= link_to "Dismiss Search", root_path, class: "btn btn-danger" %></td>
+              <% end %>
+            <% end %>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   </div>
 </div>
-

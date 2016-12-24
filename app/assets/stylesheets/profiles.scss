@@ -104,3 +104,49 @@ td {
 	  }
   }
 }
+.invitation-page {
+  margin-top: 110px;
+  position: absolute;
+  top: 0;
+  width: 90%;
+  height: 50%;
+  background-image: image-url("login_banner_small.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 20px;
+}
+.search_to_invite, .invite {
+  margin: 250px 0px 0px 650px;
+  .feedback {
+    display: none;
+    padding-top: 40px;
+    font-size: 1.2em;
+    color: red;
+  }
+  .field {
+    background-color: black;
+    padding-top: 10px;
+    border-color: black;
+    }
+  #sbmt-btn, #send-btn {
+    margin-top: 10px;
+    border-radius: 10px;
+    display: none;
+  }
+  .email {
+    display: none;
+  }
+  .invitation-form, .email-form {
+    margin-left: 15px;
+  }
+  .header {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    margin: 20px 0px 20px 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.7em;
+  }
+}

@@ -1,7 +1,9 @@
 class User < ActiveRecord::Base
-	extend TokenContext
+  extend TokenContext
   include Tokenizer
- #friendship associations
+  attr_accessor :remember_token, :activation_token, :reset_token
+
+ # Friendship associations
   has_many :friendships, class_name: 'Friendship', foreign_key: 'user_id', dependent: :destroy
   has_many :friends, through: :friendships
   has_many :accepted_friendships, -> { where('friendship_status = ?', 2) }, class_name: 'Friendship'
@@ -9,81 +11,98 @@ class User < ActiveRecord::Base
   has_many :pending_friendships, -> { where('friendship_status = ?', 1) }, class_name: 'Friendship'
   has_many :friendships_initiated_by_me, -> { where('initiator = ?', true) }, class_name: 'Friendship', foreign_key: 'user_id', dependent: :destroy
   has_many :friendships_not_initiated_by_me, -> { where('initiator = ?', false) }, class_name: 'Friendship', foreign_key: 'user_id', dependent: :destroy
-  attr_accessor :remember_token, :activation_token, :reset_token
-	before_save :downcase_email_and_name
-	before_create :create_activation_digest
 
-	validates :name,	presence: true, length: { maximum: 30 }
-	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-	validates :email, presence: true, length: { maximum: 255 },
-						format: { with: VALID_EMAIL_REGEX },
-						uniqueness: { case_sensitive: false }
+  before_save :downcase_email_and_name
+  before_create :create_activation_digest
 
-	has_secure_password
-	validates :password, length: { minimum: 6 }
-	# add in api cross reference later to verify summoner name exists in lol db
+  # Data Validations
+  validates :name,	presence: true, length: { maximum: 30 }
+  validate :verify_summoner_name
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :email, presence: true, length: { maximum: 255 },
+            format: { with: VALID_EMAIL_REGEX },
+            uniqueness: { case_sensitive: false }
 
-	def remember
-		self.remember_token = User.new_token
-		update_attribute(:remember_digest, User.digest(remember_token))
-	end
+  has_secure_password
+  validates :password, length: { minimum: 6 }
 
-	# Forgets a user.
-	def forget
-		update_attribute(:remember_digest, nil)
-	end
+  def remember
+    self.remember_token = User.new_token
+    update_attribute(:remember_digest, User.digest(remember_token))
+  end
 
-	# Activates an account
-	def activate
-		update_attribute(:activated, true)
-		update_attribute(:activated_at, Time.zone.now)
-	end
+  # Forgets a user.
+  def forget
+    update_attribute(:remember_digest, nil)
+  end
 
-	# Sends an activation email
-	def send_activation_email
-		UserMailer.account_activation(self).deliver_now
-	end
-	
-	# Sets the password reset attributes
-	def create_reset_digest
-		self.reset_token = User.new_token
-		update_attribute(:reset_digest, User.digest(reset_token))
-		update_attribute(:reset_sent_at, Time.zone.now)
-	end
+  # Activates an account
+  def activate
+    update_attribute(:activated, true)
+    update_attribute(:activated_at, Time.zone.now)
+  end
 
-	# Sends password reset email.
-	def send_password_reset_email
-		UserMailer.password_reset(self).deliver_now
-	end
+  # Sends an activation email
+  def send_activation_email
+    UserMailer.account_activation(self).deliver_now
+  end
 
-	# Returns true if a password reset has expired
-	def password_reset_expired?
-		reset_sent_at < 2.hours.ago
-	end
-	
+  # Sets the password reset attributes
+  def create_reset_digest
+    self.reset_token = User.new_token
+    update_attribute(:reset_digest, User.digest(reset_token))
+    update_attribute(:reset_sent_at, Time.zone.now)
+  end
+
+  # Sends password reset email.
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
+  end
+
+  # Returns true if a password reset has expired
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
+  end
+
   def self.find_summoner_by_name(summoner_name)
-		where(name: summoner_name).first
-	end
+    where(name: summoner_name).first
+  end
 
-	def has_reached_daily_friend_request_limit?
+  def has_reached_daily_friend_request_limit?
     friendships_initiated_by_me.where('created_at > ?', Time.now.beginning_of_day).count >= Friendship.daily_request_limit
   end
 
   def get_online_friends
-  	accepted_friendships.joins("INNER JOIN users on friend_id = users.id").where("users.logged_in = ?", true)
+    accepted_friendships.joins("INNER JOIN users on friend_id = users.id").where("users.logged_in = ?", true)
   end
 
-	private
+  private
 
-	#Converts name and email to all lower-case
-	def downcase_email_and_name
-		self.email = email.to_s.downcase
-		self.name = name.to_s.downcase
-	end
+  #Converts name and email to all lower-case
+  def downcase_email_and_name
+    self.email = email.to_s.downcase
+    self.name = name.to_s.downcase
+  end
 
-	# Creates and assigns the activation token and digest
-	def create_activation_digest
-		self.activation_token = User.new_token
-		self.activation_digest = User.digest(activation_token)
-	end
+  # Creates and assigns the activation token and digest
+  def create_activation_digest
+    self.activation_token = User.new_token
+    self.activation_digest = User.digest(activation_token)
+  end
+
+  # Verifies that the summoner name corresponds to a registered LoL profile.
+  def verify_summoner_name
+    begin 
+      summoner = $client.summoner.by_name(name).first
+    rescue
+      errors.add(:name, "has to be a registered LoL Summoner Name. Register at LoL's official website and then try again.")
+      return
+    end
+
+    begin
+      $client.stats.ranked(summoner.id)
+    rescue
+      errors.add(:name, "Summoner stats were not found. Verify that summoner has been active in the last calendar year and try signing up again.")
+    end
+  end
 end
