@@ -93,7 +93,7 @@ class User < ActiveRecord::Base
   # Verifies that the summoner name corresponds to a registered LoL profile.
   def verify_summoner_name
     begin 
-      summoner = $client.summoner.by_name(name).first
+      summoner = $client.summoner.by_name(name.downcase).first
     rescue
       errors.add(:name, "has to be a registered LoL Summoner Name. Register at LoL's official website and then try again.")
       return
